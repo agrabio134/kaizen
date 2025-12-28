@@ -1,689 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description"
-        content="$PEE - The wildest meme coin on SOL, bringing laughs, chaos, and community vibes to the blockchain! Originally inspired by the SOL token, but flowing strong on SOL.">
-    <meta name="keywords" content="$PEE, peecoin, meme coin, cryptocurrency, blockchain, tokenomics, community, SOL">
-    <meta name="author" content="$PEE Crew">
-    <link rel="shortcut icon" href="./assets/pee_main_text.png" type="image/x-icon">
-    <title>$PEE - Gotta PEE?</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Inter:wght@300;600;800&family=Luckiest+Guy&display=swap"
-        rel="stylesheet">
+    <meta name="description" content="Kaizen - AI Agent on ElizaOS. Memes, momentum, constant improvement.">
+    <meta name="keywords" content="kaizen, ai agent, meme, elizaos, ai">
+    <meta name="author" content="Kaizen Team">
+    <link rel="shortcut icon" href="./assets/main-image.jpg" type="image/x-icon">
+    <title>Kaizen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Comic Neue', cursive;
-            color: #ffffff;
+            font-family: 'Source Code Pro', monospace;
+            color: #00ff00;
+            background: #000;
             overflow-x: hidden;
-            overflow-y: auto;
-            background: linear-gradient(180deg, #000000, #202020);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" stroke="%23FFFF00" stroke-width="3" fill="none"/><circle cx="16" cy="16" r="5" fill="%23FFFF00"><animate attributeName="opacity" values="1;0.4;1" dur="1s" repeatCount="indefinite"/></circle></svg>') 16 16, auto;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y;
+            min-height: 100vh;
+            position: relative;
+        }
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
+        #preloader.hidden { opacity: 0; pointer-events: none; }
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00;
+            margin-bottom: 30px;
+        }
+        .progress-bar {
+            width: 400px;
+            height: 8px;
+            background: rgba(0,255,0,0.2);
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #00ff00;
+            box-shadow: 0 0 20px #00ff00;
+            transition: width 0.1s ease;
+        }
+        .percent {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            text-shadow: 0 0 10px #00ff00;
         }
 
-        a:hover,
-        button:hover,
-        .cta-button:hover,
-        .social-icon:hover {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" stroke="%23FFD700" stroke-width="3" fill="none"/><circle cx="16" cy="16" r="5" fill="%23FFD700"><animate attributeName="opacity" values="1;0.4;1" dur="1s" repeatCount="indefinite"/></circle></svg>') 16 16, pointer;
+        /* Matrix rain overlay */
+        #matrix-rain {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            z-index: 0;
         }
-
         #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            filter: brightness(1.1) contrast(1.1) saturate(1.2);
             opacity: 0.7;
         }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 60px 20px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 60px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
-
         header {
             text-align: center;
-            padding: 60px 15px;
-            position: relative;
+            padding: 80px 0 40px;
         }
-
-        #logo {
-            width: 240px;
-            max-width: 100%;
-            filter: drop-shadow(0 0 15px rgba(255, 255, 0, 0.4)) brightness(1.1);
+        .logo-img {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0 0 30px #00ff00);
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            padding: 8px;
+            background: rgba(0,255,0,0.1);
             margin-bottom: 20px;
         }
-
-        .nav-menu {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+        #logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.8rem;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+            margin: 0 0 12px;
+            letter-spacing: 4px;
         }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #ffffff;
-            font-family: 'Luckiest Guy', cursive;
-            font-size: 1.6em;
-            transition: color 0.3s ease, transform 0.3s ease;
+        .glitch {
             position: relative;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #FFFF00, #FFD700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 5px 10px;
-            border-radius: 10px;
+            animation: glitch 3s infinite;
         }
-
-        .nav-menu a::after {
-            content: '';
+        @keyframes glitch {
+            0%,100% { text-shadow: 0 0 20px #00ff00; }
+            2% { text-shadow: 4px 0 0 #ff00ff, -4px 0 0 #00ffff; }
+            4% { text-shadow: -4px 0 0 #ff00ff, 4px 0 0 #00ffff; }
+            6% { text-shadow: 0 0 20px #00ff00; }
+        }
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 10px 0;
+            text-shadow: 0 0 8px #00ff00;
+        }
+        .scanline {
             position: absolute;
-            width: 0;
-            height: 5px;
-            bottom: -8px;
-            left: 0;
-            background-color: #FFD700;
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover::after {
+            top: 0; left: 0;
             width: 100%;
+            height: 4px;
+            background: linear-gradient(to bottom, transparent, rgba(0,255,0,0.3));
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
         }
-
-        .nav-menu a:hover {
-            transform: scale(1.1);
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
         }
-
-        .section {
-            padding: 50px;
-            background: linear-gradient(135deg, rgba(255, 255, 0, 0.15), rgba(0, 0, 0, 0.7));
-            border: 4px dashed #FFFF00;
-            border-radius: 40px;
-            box-shadow: 0 10px 40px rgba(255, 255, 0, 0.25), inset 0 0 15px rgba(255, 255, 0, 0.15);
-            opacity: 0;
-            transform: translateY(50px) skewX(-5deg);
-            transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.4s ease;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0) skewX(0deg);
-        }
-
-        .section:hover {
-            box-shadow: 0 15px 50px rgba(255, 255, 0, 0.3), inset 0 0 20px rgba(255, 255, 0, 0.2);
-            transform: scale(1.02) skewX(2deg);
-        }
-
-        h1,
-        h2 {
-            font-family: 'Luckiest Guy', cursive;
-            color: #FFFF00;
-            text-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
-        }
-
-        h1 {
-            font-size: 6em;
-            margin: 0 0 25px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        h2 {
-            font-size: 3.5em;
-            margin-bottom: 25px;
-        }
-
-        p {
-            font-family: 'Comic Neue', cursive;
-            font-size: 1.4em;
-            line-height: 1.6;
-            color: #e0e0e0;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
-
-        .cta-button {
-            background: linear-gradient(135deg, #FFFF00, #FFD700);
-            color: #000000;
-            padding: 18px 45px;
-            border: none;
-            border-radius: 70px;
-            font-size: 1.8em;
-            font-family: 'Luckiest Guy', cursive;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(255, 255, 0, 0.4);
-            margin-top: 25px;
-            display: inline-block;
-            text-transform: uppercase;
-        }
-
-        .cta-button:hover {
-            background: linear-gradient(135deg, #FFD700, #FFFF00);
-            transform: scale(1.15) rotate(5deg);
-            box-shadow: 0 8px 30px rgba(255, 255, 0, 0.6);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 25px;
-        }
-
-        .social-icon {
-            width: 55px;
-            height: 55px;
-            transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.5));
-        }
-
-        .social-icon:hover {
-            transform: scale(1.3) rotate(15deg);
-            filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-
         .ca-address {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #FFD700;
-            word-break: break-all;
+            font-size: 0.95rem;
+            background: rgba(0,255,0,0.1);
+            border: 1px solid #00ff00;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 25px 0;
+            cursor: pointer;
+            text-shadow: 0 0 8px #00ff00;
+        }
+        .social-links {
+            margin: 25px 0;
+        }
+        .social-link {
+            color: #00ff00;
+            font-size: 2.2rem;
+            margin: 0 18px;
+            text-shadow: 0 0 12px #00ff00;
+            transition: all 0.3s;
+        }
+        .social-link:hover {
+            transform: translateY(-6px) scale(1.3);
+            text-shadow: 0 0 20px #00ff00;
+        }
+        .cta-button {
+            background: transparent;
+            color: #00ff00;
+            padding: 18px 40px;
+            border: 2px solid #00ff00;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0,255,0,0.4);
+            transition: all 0.4s;
+            text-shadow: 0 0 10px #00ff00;
             margin: 30px 0;
-            text-align: center;
-            background: linear-gradient(135deg, rgba(255, 255, 0, 0.1), rgba(0, 0, 0, 0.9));
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: 0 0 20px rgba(255, 255, 0, 0.3);
+            display: inline-block;
+        }
+        .cta-button:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 40px rgba(0,255,0,0.8);
+            transform: translateY(-5px);
         }
 
-        .header-socials {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        #gallery-section {
-            grid-column: 1 / -1;
-            padding: 50px;
-            background: linear-gradient(135deg, rgba(255, 255, 0, 0.15), rgba(0, 0, 0, 0.7));
-            border: 4px dashed #FFFF00;
-            border-radius: 40px;
-            box-shadow: 0 10px 40px rgba(255, 255, 0, 0.25), inset 0 0 15px rgba(255, 255, 0, 0.15);
-        }
-
-        .gallery {
-            display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 30px 0;
-            background: #000000;
-            border-top: 8px solid #333333;
-            border-bottom: 8px solid #333333;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            position: relative;
-            touch-action: pan-x;
-        }
-
-        .gallery::-webkit-scrollbar {
+        /* Modal */
+        #chat-modal {
             display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
         }
-
-        .gallery::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            width: 20px;
-            background: repeating-linear-gradient(to bottom, #333333 0 10px, #000000 10px 20px);
-            z-index: 1;
-        }
-
-        .gallery::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            width: 20px;
-            background: repeating-linear-gradient(to bottom, #333333 0 10px, #000000 10px 20px);
-            z-index: 1;
-        }
-
-        .gallery img {
-            width: auto;
-            height: 250px;
-            max-width: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 3px solid #FFD700;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            scroll-snap-align: center;
-            filter: sepia(0.2) brightness(1.1);
-            flex-shrink: 0;
-        }
-
-        .gallery img:hover {
-            transform: scale(1.2) rotate(5deg);
-            box-shadow: 0 0 20px rgba(255, 255, 0, 0.6);
-            filter: sepia(0) brightness(1.3);
-        }
-
-        #chart-section {
-            padding: 50px;
-            background: linear-gradient(135deg, rgba(255, 255, 0, 0.15), rgba(0, 0, 0, 0.7));
-            border: 4px dashed #FFFF00;
-            border-radius: 40px;
-            box-shadow: 0 10px 40px rgba(255, 255, 0, 0.25);
-        }
-
-        #dexscreener-embed {
+        #chat-modal.active { display: flex; }
+        .modal-content {
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0,255,0,0.6);
+            overflow: hidden;
             position: relative;
-            width: 100%;
-            padding-bottom: 50%;
         }
-
-        #dexscreener-embed iframe {
+        .modal-header {
+            padding: 15px 20px;
+            background: rgba(0,255,0,0.1);
+            border-bottom: 1px dashed #00ff00;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: #00ff00;
+        }
+        .close-modal {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            border: 0;
-            border-radius: 25px;
+            top: 12px; right: 20px;
+            font-size: 2rem;
+            color: #00ff00;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ff00;
         }
+        .close-modal:hover { color: #ff00ff; }
 
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+        .card {
+            background: rgba(0,20,0,0.4);
+            border: 1px dashed #00ff00;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s;
+            backdrop-filter: blur(4px);
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 15px 40px rgba(0,255,0,0.3);
+            border-color: #00ff88;
+        }
+        .card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff00;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
         footer {
             text-align: center;
-            padding: 70px 15px;
-            color: #b0b0b0;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1em;
-            font-weight: 300;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(255, 255, 0, 0.15));
-            border-top: 3px solid rgba(255, 255, 0, 0.3);
-            border-radius: 40px 40px 0 0;
-            min-height: 150px;
-            box-sizing: border-box;
+            padding: 50px 0;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-shadow: 0 0 8px #00ff00;
         }
-
-        .disclaimer {
-            text-align: center;
-            padding: 50px 15px;
-            color: #b0b0b0;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1em;
-            font-weight: 300;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(255, 255, 0, 0.15));
-            border: 4px dashed #FFFF00;
-            border-radius: 40px;
-            box-shadow: 0 10px 40px rgba(255, 255, 0, 0.25);
-            margin: 60px 15px;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: linear-gradient(135deg, rgba(255, 255, 0, 0.15), rgba(0, 0, 0, 0.7));
-            padding: 25px;
-            border-radius: 30px;
-            border: 3px dotted #FFFF00;
-            box-shadow: 0 5px 20px rgba(255, 255, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: translateY(-10px) rotate(3deg);
-            box-shadow: 0 10px 30px rgba(255, 255, 0, 0.4);
-        }
-
-        .card h3 {
-            font-family: 'Luckiest Guy', cursive;
-            color: #FFFF00;
-            font-size: 2em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 5px rgba(255, 255, 0, 0.5);
-        }
-
-        .card p {
-            font-size: 1.2em;
-            margin: 0;
-            color: #e0e0e0;
-        }
-
-        @media (min-width: 1400px) {
-            #dexscreener-embed {
-                padding-bottom: 30%;
-            }
-        }
-
         @media (max-width: 768px) {
-            body {
-                cursor: default;
-                touch-action: pan-y;
-            }
-
-            a:hover,
-            button:hover,
-            .cta-button:hover,
-            .social-icon:hover {
-                cursor: pointer;
-            }
-
-            .content-wrapper {
-                padding: 40px 10px;
-                gap: 30px;
-            }
-
-            header {
-                padding: 30px 10px;
-            }
-
-            #logo {
-                width: 200px;
-            }
-
-            .nav-menu {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                gap: 15px;
-                flex-wrap: wrap;
-                padding: 10px;
-                background: none;
-                box-shadow: none;
-                position: static;
-            }
-
-            .nav-menu a {
-                font-size: 1.2em;
-                padding: 5px 8px;
-            }
-
-            .section,
-            #chart-section,
-            #gallery-section {
-                padding: 30px 15px;
-            }
-
-            h1 {
-                font-size: 4em;
-            }
-
-            h2 {
-                font-size: 2.5em;
-            }
-
-            p {
-                font-size: 1.2em;
-            }
-
-            .cta-button {
-                font-size: 1.5em;
-                padding: 15px 35px;
-            }
-
-            .social-links {
-                gap: 20px;
-            }
-
-            .social-icon {
-                width: 50px;
-                height: 50px;
-            }
-
-            .ca-address {
-                font-size: 1.2em;
-                padding: 15px;
-                margin: 20px 0;
-            }
-
-            #dexscreener-embed {
-                padding-bottom: 70%;
-            }
-
-            .gallery {
-                touch-action: pan-x;
-            }
-
-            .gallery img {
-                height: 180px;
-                max-width: 90%;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                padding: 50px 10px;
-                font-size: 1em;
-                min-height: 120px;
-            }
-
-            .disclaimer {
-                padding: 30px 10px;
-                margin: 30px 10px;
-                font-size: 1em;
-            }
+            #logo-text { font-size: 2.8rem; }
+            .logo-img { width: 130px; }
+            header { padding: 60px 0 30px; }
+            .cta-button { padding: 16px 36px; font-size: 1.2rem; }
+            main { gap: 20px; padding: 20px 0; }
+            .modal-content { height: 90vh; width: 95%; }
         }
-
         @media (max-width: 480px) {
-            #logo {
-                width: 160px;
-            }
-
-            .nav-menu {
-                gap: 10px;
-            }
-
-            .nav-menu a {
-                font-size: 1em;
-                padding: 4px 6px;
-            }
-
-            h1 {
-                font-size: 3em;
-            }
-
-            h2 {
-                font-size: 2em;
-            }
-
-            p {
-                font-size: 1em;
-            }
-
-            .cta-button {
-                font-size: 1.3em;
-                padding: 12px 30px;
-            }
-
-            .social-icon {
-                width: 40px;
-                height: 40px;
-            }
-
-            .ca-address {
-                font-size: 1em;
-                padding: 10px;
-            }
-
-            .gallery img {
-                height: 150px;
-                max-width: 85%;
-            }
-
-            footer {
-                padding: 40px 10px;
-                font-size: 0.9em;
-                min-height: 100px;
-            }
-
-            .disclaimer {
-                padding: 20px 10px;
-                margin: 20px 10px;
-                font-size: 0.9em;
-            }
+            #logo-text { font-size: 2.2rem; }
+            .logo-img { width: 100px; }
+            .social-link { font-size: 1.9rem; }
+            .cta-button { padding: 14px 30px; font-size: 1.1rem; }
         }
     </style>
 </head>
-
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-text glitch">KAIZEN</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="percent" id="percent">0%</div>
+    </div>
+
+    <!-- Matrix digital rain -->
+    <canvas id="matrix-rain"></canvas>
+
+    <!-- Particle AI background -->
     <canvas id="bg-canvas"></canvas>
 
-    <div class="content-wrapper">
-        <header>
-            <img id="logo" src="./assets/pee_main_text.png" alt="$PEE Logo">
-            <div class="ca-address" id="caAddress" onclick="copyCA()">Contract Address: SOON</div>
-            <div class="header-socials">
-                <a href="https://x.com/peecoin/" target="_blank" aria-label="Follow $PEE on X">
-                    <img class="social-icon"
-                        src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png"
-                        alt="X Logo">
-                </a>
-                <a href="https://t.me/Peecoin" target="_blank" aria-label="Join $PEE on Telegram">
-                    <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
-                        alt="Telegram Logo">
-                </a>
-            </div>
-            <nav class="nav-menu" id="nav-menu">
-                <a href="#vision" class="nav-link">Vision</a>
-                <a href="#tokenomics" class="nav-link">Tokenomics</a>
-                <a href="#community" class="nav-link">Community</a>
-                <a href="#gallery" class="nav-link">Gallery</a>
-                <a href="#chart" class="nav-link">Market Data</a>
-            </nav>
-        </header>
+    <!-- Scanline effect -->
+    <div class="scanline"></div>
 
-        <section class="section" id="vision">
-            <h2>Our Flow</h2>
-            <div class="cards">
-                <div class="card">
-                    <h3>Origin Story</h3>
-                    <p>$PEE started as a fun idea, but now it's flowing full force on SOL!
-                        It's the meme coin all about that urgent feeling - when you gotta PEE, you gotta go!</p>
-                </div>
-                <div class="card">
-                    <h3>Vision Ahead</h3>
-                    <p>Our vision is a world where $PEE reminds you to take a break, have a laugh, and embrace the flow.
-                        We pivoted to SOL for faster transactions - because when nature calls, you can't wait!</p>
-                </div>
-                <div class="card">
-                    <h3>Join the Movement</h3>
-                    <p>Join the $PEE movement: it's about having that PEE feeling and turning it into crypto gold.
-                        Rooted in meme culture, $PEE blends fun and community for holders who appreciate the lighter
-                        side of life.</p>
-                </div>
+    <!-- Chat Modal -->
+    <div id="chat-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                Talk with Kaizen
+                <span class="close-modal" onclick="closeModal()">×</span>
             </div>
-            <button class="cta-button" onclick="scrollToSection('community')">Join the Flow!</button>
-        </section>
-
-        <section class="section" id="tokenomics">
-            <h2>Tokenomics (The Splashy Details)</h2>
-            <div class="cards">
-                <div class="card">
-                    <h3>Total Supply</h3>
-                    <p>1,000,000,000 $PEE tokens - enough to make a splash, but scarce like bathroom breaks during a
-                        movie!</p>
-                </div>
-                <div class="card">
-                    <h3>Distribution</h3>
-                    <p>100% fair launch, no pre-allocation. All tokens go to liquidity and community - we're all in this
-                        stream together.</p>
-                </div>
-                <div class="card">
-                    <h3>Security</h3>
-                    <p>Audited contract, renounced ownership - as trustworthy as nature's call.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="section" id="community">
-            <h2>Our PEE Squad</h2>
-            <div class="cards">
-                <div class="card">
-                    <h3>Community Vibes</h3>
-                    <p>Join the community that's all about that PEE life! From meme contests about awkward bathroom
-                        moments to discussions on holding strong (your tokens, that is).</p>
-                </div>
-                <div class="card">
-                    <h3>Events & Engagement</h3>
-                    <p>Engage in events, vote on initiatives, and connect with fellow holders who get the urgency of
-                        $PEE. Giveaways, and exclusive content for our stream team.</p>
-                </div>
-                <div class="card">
-                    <h3>Welcome All</h3>
-                    <p>Whether you're holding through the pressure or just here for the laughs, $PEE welcomes all who
-                        embrace the flow.</p>
-                </div>
-            </div>
-            <div class="social-links">
-                <a href="https://x.com/peecoin/" target="_blank" aria-label="Follow $PEE on X">
-                    <img class="social-icon"
-                        src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png"
-                        alt="X Logo">
-                </a>
-                <a href="https://t.me/Peecoin" target="_blank" aria-label="Join $PEE on Telegram">
-                    <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
-                        alt="Telegram Logo">
-                </a>
-            </div>
-            <button class="cta-button" onclick="scrollToSection('gallery')">Check the Gallery!</button>
-        </section>
-
-        <section id="gallery-section" class="section">
-            <h2>PEE Gallery</h2>
-            <div class="gallery">
-                <img src="./assets/image_1.jpg" alt="PEE Meme 1">
-                <img src="./assets/image_2.jpg" alt="PEE Meme 2">
-                <img src="./assets/image_3.jpg" alt="PEE Meme 3">
-                <img src="./assets/image_4.jpg" alt="PEE Meme 3">
-                <img src="./assets/main.jpg" alt="PEE Main Text">
-            </div>
-        </section>
-
-        <div class="disclaimer">
-            <p>Disclaimer: This is NOT financial advice. Participation involves risk of capital loss. Always do your own
-                research and invest only base on your conviction.</p>
+            <iframe src="https://www.elizacloud.ai/chat/841c4f8c-9d23-4dd3-b84f-82d5d0dc78fa" frameborder="0" style="width:100%; height:100%;"></iframe>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2025 $PEE. All rights reserved. Remember to PEE before you trade!</p>
-    </footer>
+    <div class="container">
+        <header>
+            <img src="https://l5fpqchmvmrcwa0k.public.blob.vercel-storage.com/character-avatars/e2bde479-5ea5-424c-b36b-cd51d8cd0aab/1766937255758-photo_6235780279272410482_y.jpg" alt="Kaizen AI Avatar" class="logo-img">
+            <h1 id="logo-text" class="glitch">Kaizen</h1>
+            <p class="tagline">Built on ElizaOS</p>
+            <p class="tagline">Memes, momentum, and constant improvement.</p>
+            <p class="tagline">Culture > charts. Vibes > noise.</p>
+            <p class="tagline">Not financial advice.</p>
+
+            <div class="ca-address" onclick="copyCA()">Contract Address: SOON</div>
+
+            <div class="social-links">
+                <a href="https://x.com/ai16zkaizen" target="_blank" class="social-link" aria-label="X">X</a>
+            </div>
+
+            <button class="cta-button" onclick="openModal()">
+                Talk with Kaizen
+            </button>
+        </header>
+
+        <main>
+            <div class="card">
+                <h3>Origin</h3>
+                <p>Kaizen is an AI agent engineered for meme enthusiasts, running natively on ElizaOS.</p>
+            </div>
+            <div class="card">
+                <h3>Directive</h3>
+                <p>Amplifies memes, drives momentum, and embodies constant improvement in the crypto space.</p>
+            </div>
+            <div class="card">
+                <h3>Sync In</h3>
+                <p>Join the AI-meme nexus where culture beats charts and vibes filter out noise.</p>
+            </div>
+            <div class="card">
+                <h3>Tokenomics</h3>
+                <p>1B total supply • 100% fair launch • Renounced contract • Liquidity locked</p>
+            </div>
+            <div class="card">
+                <h3>Network</h3>
+                <p>Community-driven upgrades, meme deployments, and AI-enhanced interactions.</p>
+            </div>
+            <div class="card">
+                <h3>Access</h3>
+                <p>Open to all protocols. Debug vibes or compile laughs — Kaizen connects.</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Kaizen. Upgrade before you compile.</p>
+        </footer>
+    </div>
 
     <script>
+        // Preloader
+        let loadProgress = 0;
+        const progressFill = document.getElementById('progress-fill');
+        const percentText = document.getElementById('percent');
+        const preloader = document.getElementById('preloader');
+
+        const loadingInterval = setInterval(() => {
+            loadProgress += Math.random() * 8 + 2; // Speed up randomly
+            if (loadProgress > 100) loadProgress = 100;
+
+            progressFill.style.width = loadProgress + '%';
+            percentText.textContent = Math.floor(loadProgress) + '%';
+
+            if (loadProgress >= 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    preloader.classList.add('hidden');
+                }, 500);
+            }
+        }, 80);
+
+        // Modal functions
+        function openModal() {
+            document.getElementById('chat-modal').classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('chat-modal').classList.remove('active');
+        }
+
+        // Matrix rain (unchanged)
+        const matrixCanvas = document.getElementById('matrix-rain');
+        const mctx = matrixCanvas.getContext('2d');
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 14;
+        let columns = Math.floor(matrixCanvas.width / fontSize);
+        const drops = Array(columns).fill(1);
+
+        function drawMatrix() {
+            mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            mctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+            mctx.fillStyle = '#00ff00';
+            mctx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                mctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Particle background (unchanged - perfect A I)
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
@@ -693,157 +436,113 @@
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 60000;
 
-        const peePositions = new Float32Array(particlesCount * 3);
+        const initialPositions = new Float32Array(particlesCount * 3);
         const scatteredPositions = new Float32Array(particlesCount * 3);
 
-
-        function copyCA() {
-            const caText = document.getElementById("caAddress").innerText.replace("Contract Address: ", "");
-            navigator.clipboard.writeText(caText).then(() => {
-                const caDiv = document.getElementById("caAddress");
-                const original = caDiv.innerHTML;
-                caDiv.innerHTML = "Copied!";
-                setTimeout(() => {
-                    caDiv.innerHTML = original;
-                }, 1500);
-            }).catch(err => {
-                alert("Failed to copy: " + err);
-            });
-        }
-
-        function generatePEEShape(index, total) {
+        function generateAIShape(index, total) {
             const t = index / total;
-            let x, y, z;
-            if (t < 0.333) { // "P"
-                const tP = t / 0.333;
-                const leftX = -2.0;
-                const rightX = leftX + 1.0;
-                if (tP < 0.4) {
-                    x = leftX + (Math.random() - 0.5) * 0.3;
-                    y = -1.0 + (tP / 0.4) * 2.0;
-                } else if (tP < 0.6) {
-                    x = leftX + ((tP - 0.4) / 0.2) * 1.0;
-                    y = 1.0 + (Math.random() - 0.5) * 0.3;
+            let x, y, z = (Math.random() - 0.5) * 1.5;
+
+            if (t < 0.5) {
+                const subT = t / 0.5;
+                const thickness = 1.2;
+
+                if (subT < 0.3) {
+                    x = -3.8 + (Math.random() - 0.5) * thickness;
+                    y = -3 + (subT / 0.3) * 6;
+                } else if (subT < 0.6) {
+                    x = -1.2 + (Math.random() - 0.5) * thickness;
+                    y = -3 + ((subT - 0.3) / 0.3) * 6;
+                } else if (subT < 0.8) {
+                    x = -3.8 + ((subT - 0.6) / 0.2) * 2.6;
+                    y = 3 + (Math.random() - 0.5) * thickness;
                 } else {
-                    const tc = (tP - 0.6) / 0.4;
-                    x = rightX - 1.0 * tc + 0.5 * Math.sin(Math.PI * tc);
-                    y = 1.0 - 1.0 * tc + (Math.random() - 0.5) * 0.3;
+                    x = -3.8 + ((subT - 0.8) / 0.2) * 2.6;
+                    y = 0 + (Math.random() - 0.5) * thickness;
                 }
-                x += (Math.random() - 0.5) * 0.15;
-                y += (Math.random() - 0.5) * 0.15;
-                z = (Math.random() - 0.5) * 1.0;
-            } else if (t < 0.666) { // first "E"
-                const tE = (t - 0.333) / 0.333;
-                const baseX = -0.5;
-                if (tE < 0.25) {
-                    x = baseX + (Math.random() - 0.5) * 0.3;
-                    y = (tE / 0.25) * 2.0 - 1.0;
-                } else if (tE < 0.5) {
-                    x = baseX + ((tE - 0.25) / 0.25) * 1.0;
-                    y = 1.0 + (Math.random() - 0.5) * 0.3;
-                } else if (tE < 0.75) {
-                    x = baseX + ((tE - 0.5) / 0.25) * 0.8;
-                    y = 0 + (Math.random() - 0.5) * 0.3;
+            } else {
+                const subT = (t - 0.5) / 0.5;
+                const stemX = 2.5;
+                const barWidth = 4.0;
+                const thickness = 1.6;
+
+                if (subT < 0.2) {
+                    x = stemX + (subT / 0.2 - 0.5) * barWidth;
+                    y = 3 + (Math.random() - 0.5) * thickness;
+                } else if (subT < 0.8) {
+                    x = stemX + (Math.random() - 0.5) * thickness;
+                    y = 3 - ((subT - 0.2) / 0.6) * 6;
                 } else {
-                    x = baseX + ((tE - 0.75) / 0.25) * 1.0;
-                    y = -1.0 + (Math.random() - 0.5) * 0.3;
+                    x = stemX + ((subT - 0.8) / 0.2 - 0.5) * barWidth;
+                    y = -3 + (Math.random() - 0.5) * thickness;
                 }
-                x += (Math.random() - 0.5) * 0.15;
-                y += (Math.random() - 0.5) * 0.15;
-                z = (Math.random() - 0.5) * 1.0;
-            } else { // second "E"
-                const tE2 = (t - 0.666) / 0.334;
-                const baseX = 1.0;
-                if (tE2 < 0.25) {
-                    x = baseX + (Math.random() - 0.5) * 0.3;
-                    y = (tE2 / 0.25) * 2.0 - 1.0;
-                } else if (tE2 < 0.5) {
-                    x = baseX + ((tE2 - 0.25) / 0.25) * 1.0;
-                    y = 1.0 + (Math.random() - 0.5) * 0.3;
-                } else if (tE2 < 0.75) {
-                    x = baseX + ((tE2 - 0.5) / 0.25) * 0.8;
-                    y = 0 + (Math.random() - 0.5) * 0.3;
-                } else {
-                    x = baseX + ((tE2 - 0.75) / 0.25) * 1.0;
-                    y = -1.0 + (Math.random() - 0.5) * 0.3;
-                }
-                x += (Math.random() - 0.5) * 0.15;
-                y += (Math.random() - 0.5) * 0.15;
-                z = (Math.random() - 0.5) * 1.0;
             }
-            return [x * 1.5, y * 1.5, z];
+
+            x += (Math.random() - 0.5) * 0.4;
+            y += (Math.random() - 0.5) * 0.4;
+
+            return [x, y, z];
         }
 
         for (let i = 0; i < particlesCount; i++) {
-            let idx = i * 3;
-            const [x, y, z] = generatePEEShape(i, particlesCount);
-            peePositions[idx] = x;
-            peePositions[idx + 1] = y;
-            peePositions[idx + 2] = z;
-
-            scatteredPositions[idx] = (Math.random() - 0.5) * 25;
-            scatteredPositions[idx + 1] = (Math.random() - 0.5) * 25;
-            scatteredPositions[idx + 2] = (Math.random() - 0.5) * 25;
+            const idx = i * 3;
+            const [x, y, z] = generateAIShape(i, particlesCount);
+            initialPositions[idx] = x; initialPositions[idx + 1] = y; initialPositions[idx + 2] = z;
+            scatteredPositions[idx] = (Math.random() - 0.5) * 35;
+            scatteredPositions[idx + 1] = (Math.random() - 0.5) * 35;
+            scatteredPositions[idx + 2] = (Math.random() - 0.5) * 35;
         }
 
         const positions = new Float32Array(particlesCount * 3);
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        positions.set(initialPositions);
+        particlesGeometry.attributes.position.needsUpdate = true;
 
         const material = new THREE.PointsMaterial({
-            color: 0xFFFF00,
-            size: 0.018,
+            color: 0x00FF00,
+            size: 0.025,
             blending: THREE.AdditiveBlending,
             transparent: true,
-            opacity: 0.7,
+            opacity: 0.85,
             sizeAttenuation: true
         });
 
         const particlesMesh = new THREE.Points(particlesGeometry, material);
         scene.add(particlesMesh);
 
-        particlesMesh.rotation.y = Math.PI / 4;
-        particlesMesh.rotation.x = Math.PI / 8;
-
         const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
         scene.add(ambientLight);
-
-        const pointLight = new THREE.PointLight(0xFFD700, 1.5, 15);
-        pointLight.position.set(0, 0, 5);
+        const pointLight = new THREE.PointLight(0x00FF00, 1.8, 20);
+        pointLight.position.set(0, 0, 8);
         scene.add(pointLight);
 
-        camera.position.z = 4.0;
+        camera.position.z = 8.5;
 
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', e => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
 
         function updateParticles(progress) {
             for (let i = 0; i < particlesCount * 3; i++) {
-                positions[i] = peePositions[i] + progress * (scatteredPositions[i] - peePositions[i]);
+                positions[i] = initialPositions[i] + progress * (scatteredPositions[i] - initialPositions[i]);
             }
             particlesGeometry.attributes.position.needsUpdate = true;
         }
 
-        updateParticles(0);
-
         window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollY / maxScroll)) : 0;
-            updateParticles(progress);
+            const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            updateParticles(Math.min(1, progress));
         });
 
         function animate() {
             requestAnimationFrame(animate);
-            particlesMesh.rotation.y += (mouseX * Math.PI * 0.2 - particlesMesh.rotation.y) * 0.07;
-            particlesMesh.rotation.x += (mouseY * Math.PI * 0.2 - particlesMesh.rotation.x) * 0.07;
-            particlesMesh.rotation.z += 0.0045;
-            pointLight.position.x = mouseX * 4;
-            pointLight.position.y = mouseY * 4;
+            particlesMesh.rotation.y += (mouseX * Math.PI * 0.2 - particlesMesh.rotation.y) * 0.05;
+            particlesMesh.rotation.x += (mouseY * Math.PI * 0.2 - particlesMesh.rotation.x) * 0.05;
+            particlesMesh.rotation.z += 0.002;
+            pointLight.position.x = mouseX * 6;
+            pointLight.position.y = mouseY * 6;
             renderer.render(scene, camera);
         }
         animate();
@@ -852,34 +551,22 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            columns = Math.floor(matrixCanvas.width / fontSize);
         });
 
-        const sections = document.querySelectorAll('.section');
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+        function copyCA() {
+            navigator.clipboard.writeText("SOON").then(() => {
+                const el = document.querySelector('.ca-address');
+                const orig = el.innerText;
+                el.innerText = "Copied!";
+                setTimeout(() => el.innerText = orig, 1500);
+            }).catch(() => {
+                alert("Copy failed");
             });
-        }, { threshold: 0.3 });
-
-        sections.forEach(section => observer.observe(section));
-
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
         }
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = link.getAttribute('href').substring(1);
-                scrollToSection(sectionId);
-            });
-        });
     </script>
 </body>
-
 </html>
