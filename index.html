@@ -309,8 +309,8 @@
             border: 1px solid rgba(0,255,0,0.2);
             border-radius: 0;
             width: 100%;
-            height: 100vh;
-            position: relative;
+            height: 100dvh;
+            /* position: relative; */
             box-shadow: inset 0 0 50px rgba(0,255,0,0.1);
             display: flex;
             flex-direction: column;
@@ -327,6 +327,7 @@
             border-bottom: 1px solid rgba(0,255,0,0.3);
             position: relative;
             text-shadow: 0 0 10px #00ff00;
+            flex-shrink: 0;
         }
         .chat-modal-header::after {
             content: '';
@@ -401,52 +402,42 @@
             text-shadow: 0 0 20px #ff0000;
             background: rgba(255,0,0,0.1);
         }
-        .chat-messages {
+       .chat-messages {
             flex: 1;
             padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 16px;
-            background: rgba(0,0,0,0.6);
-            position: relative;
+            background: #0a0a0a;
         }
-        .chat-messages::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,0,0.03) 2px, rgba(0,255,0,0.03) 4px);
-            pointer-events: none;
-            z-index: 1;
-        }
-        .chat-messages > * {
-            position: relative;
-            z-index: 2;
-        }
+
         .chat-messages::-webkit-scrollbar {
             width: 6px;
         }
+
         .chat-messages::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(0,255,0,0.3);
+            background: rgba(255,255,255,0.1);
             border-radius: 3px;
         }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+   
         .chat-message {
-            max-width: 75%;
+          max-width: 75%;
             padding: 14px 18px;
             border-radius: 16px;
             word-wrap: break-word;
             animation: fadeIn 0.3s ease;
             line-height: 1.6;
             font-size: 15px;
-            text-shadow: 0 0 5px rgba(0,255,0,0.2);
-            position: relative;
-            overflow: hidden;
         }
         .chat-message::before {
             content: '';
@@ -482,6 +473,7 @@
             align-items: center;
             border-top: 1px solid rgba(0,255,0,0.3);
             position: relative;
+            flex-shrink: 0;
         }
         .chat-input-container::after {
             content: '';
@@ -504,6 +496,7 @@
             color: #00ff00;
             font-family: inherit;
             text-shadow: 0 0 5px rgba(0,255,0,0.2);
+            resize: vertical;
         }
         #chatMessageInput::placeholder {
             color: rgba(0,255,0,0.5);
@@ -530,6 +523,7 @@
             justify-content: center;
             width: 48px;
             height: 48px;
+            flex-shrink: 0;
         }
         #chatSendButton:hover:not(:disabled) {
             background: #00ff00;
@@ -554,6 +548,7 @@
             background: rgba(0,255,0,0.05);
             border: 1px dashed rgba(0,255,0,0.2);
             border-radius: 12px;
+            flex-shrink: 0;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
@@ -566,6 +561,7 @@
             border-radius: 16px;
             animation: fadeIn 0.3s ease;
             border: 1px solid rgba(0,255,0,0.2);
+            flex-shrink: 0;
         }
         .chat-typing-dots {
             display: flex;
@@ -600,8 +596,13 @@
             .cta-button { padding: 16px 36px; font-size: 1.2rem; }
             .locked-button { padding: 16px 36px; font-size: 1.2rem; }
             main { gap: 20px; padding: 20px 0; }
-            .chat-modal-content { height: 100vh; }
+            .chat-modal-content { height: 100dvh; }
             .ca-address { word-break: break-all; }
+            .chat-input-container { padding: 16px 20px; }
+            #chatMessageInput { font-size: 16px; padding: 12px 16px; }
+            #chatSendButton { width: 44px; height: 44px; padding: 12px; }
+            .chat-messages { padding: 16px; }
+            .chat-message { font-size: 14px; padding: 12px 16px; max-width: 85%; }
         }
         @media (max-width: 480px) {
             #logo-text { font-size: 2.2rem; }
@@ -616,6 +617,7 @@
                 display: block;
                 text-align: center;
             }
+            .chat-modal-content { height: 100dvh; }
         }
         @media (min-width: 769px) {
             .chat-modal-content {
@@ -749,15 +751,29 @@
         // Modal functions
         function openChatModal() {
             document.getElementById('chatModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            // Lock scroll without killing modal touches
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+            setTimeout(() => {
+                document.getElementById('chatMessages').focus(); // Ensure focus for touch
+            }, 100);
             // Initialize chat if not already
             if (typeof kaizenChat === 'undefined') {
                 initKaizenChat();
             }
+            // Handle keyboard open/close for mobile
+            handleKeyboard();
         }
         function closeChatModal() {
             document.getElementById('chatModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+            // Restore scroll
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
         }
         // Close modal on outside click
         window.onclick = function(event) {
@@ -776,6 +792,29 @@
             }).catch(() => {
                 alert("Copy failed");
             });
+        }
+        // Keyboard handling for mobile
+        function handleKeyboard() {
+            const chatContent = document.querySelector('.chat-modal-content');
+            const input = document.getElementById('chatMessageInput');
+            let initialHeight = window.innerHeight;
+            input.addEventListener('focus', () => {
+                setTimeout(() => {
+                    const currentHeight = window.innerHeight;
+                    if (currentHeight < initialHeight * 0.9) { // Keyboard open
+                        chatContent.style.height = `calc(100dvh - ${initialHeight - currentHeight}px)`;
+                    }
+                }, 150);
+            });
+            input.addEventListener('blur', () => {
+                chatContent.style.height = '100dvh';
+            });
+            // VisualViewport API for better handling if supported
+            if ('visualViewport' in window) {
+                window.visualViewport.addEventListener('resize', () => {
+                    chatContent.style.height = `${window.visualViewport.height}px`;
+                });
+            }
         }
         // Kaizen Chat Initialization
         let kaizenChat;
@@ -820,6 +859,11 @@
                         this.sendMessage();
                     }
                 });
+                // Auto-resize input for multiline if needed
+                messageInput.addEventListener('input', (e) => {
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                });
             }
             async sendMessage() {
                 const messageInput = document.getElementById('chatMessageInput');
@@ -827,6 +871,7 @@
                 if (!message) return;
                 this.displayMessage(message, 'user');
                 messageInput.value = '';
+                messageInput.style.height = 'auto'; // Reset height
                 this.showTypingIndicator();
                 this.setInputState(false);
                 try {
@@ -912,15 +957,20 @@
                 } else {
                     messageElement.textContent = message;
                 }
+                // Force reflow and scroll
                 chatMessages.scrollTop = chatMessages.scrollHeight;
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Double for safety
             }
             async typeMessage(element, message) {
                 const formattedMessage = this.formatMarkdown(message);
                 const words = formattedMessage.split(' ');
                 for (let i = 0; i < words.length; i++) {
                     element.innerHTML += (i > 0 ? ' ' : '') + words[i];
-                    const chatMessages = document.getElementById('chatMessages');
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // Throttled: Only scroll every 5th word or at end
+                    if (i % 5 === 0 || i === words.length - 1) {
+                        const chatMessages = document.getElementById('chatMessages');
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
                     await this.sleep(30);
                 }
             }
