@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="./assets/main-image.jpg" type="image/x-icon">
     <title>Kaizen</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * { box-sizing: border-box; }
@@ -63,7 +64,6 @@
             margin-top: 20px;
             text-shadow: 0 0 10px #00ff00;
         }
-
         /* Matrix rain overlay */
         #matrix-rain {
             position: fixed;
@@ -187,7 +187,58 @@
             box-shadow: 0 0 40px rgba(0,255,0,0.8);
             transform: translateY(-5px);
         }
-
+        /* Locked Button Styles */
+        .locked-button {
+            background: rgba(0, 255, 0, 0.1);
+            color: #00ff00;
+            padding: 18px 40px;
+            border: 2px solid #666;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            cursor: not-allowed;
+            box-shadow: 0 0 10px rgba(102, 102, 102, 0.4);
+            transition: all 0.4s;
+            text-shadow: 0 0 10px #666;
+            margin: 10px 0;
+            display: inline-block;
+            text-decoration: none;
+            position: relative;
+            opacity: 0.6;
+        }
+        .locked-button::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            content: "\f023";
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+        .locked-button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        .locked-button:hover {
+            opacity: 0.8;
+            box-shadow: 0 0 15px rgba(102, 102, 102, 0.6);
+            transform: translateY(0) scale(1.02);
+        }
+        .locked-button:hover::after {
+            opacity: 1;
+        }
         main {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -232,6 +283,7 @@
             .logo-img { width: 130px; }
             header { padding: 60px 0 30px; }
             .cta-button { padding: 16px 36px; font-size: 1.2rem; }
+            .locked-button { padding: 16px 36px; font-size: 1.2rem; }
             main { gap: 20px; padding: 20px 0; }
         }
         @media (max-width: 480px) {
@@ -239,6 +291,7 @@
             .logo-img { width: 100px; }
             .social-link { font-size: 1.9rem; }
             .cta-button { padding: 14px 30px; font-size: 1.1rem; }
+            .locked-button { padding: 14px 30px; font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -251,16 +304,12 @@
         </div>
         <div class="percent" id="percent">0%</div>
     </div>
-
     <!-- Matrix digital rain -->
     <canvas id="matrix-rain"></canvas>
-
     <!-- Particle AI background -->
     <canvas id="bg-canvas"></canvas>
-
     <!-- Scanline effect -->
     <div class="scanline"></div>
-
     <div class="container">
         <header>
             <img src="https://l5fpqchmvmrcwa0k.public.blob.vercel-storage.com/character-avatars/e2bde479-5ea5-424c-b36b-cd51d8cd0aab/1766937255758-photo_6235780279272410482_y.jpg" alt="Kaizen AI Avatar" class="logo-img">
@@ -269,19 +318,19 @@
             <p class="tagline">Memes, momentum, and constant improvement.</p>
             <p class="tagline">Culture > charts. Vibes > noise.</p>
             <p class="tagline">Not financial advice.</p>
-
             <div class="ca-address" onclick="copyCA()">Contract Address: 3ejk8LXAS9kUC7XhpDGHRjARyUy5qU7PaAq7PMykpump</div>
-
             <div class="social-links">
                 <a href="https://x.com/ai16zkaizen" target="_blank" class="social-link" aria-label="X">X</a>
             </div>
-
             <!-- Changed to open chat in a popup window (best workaround for iframe block) -->
             <button class="cta-button" onclick="openChatPopup()">
                 Talk with Kaizen
             </button>
+            <!-- New Locked Button -->
+            <button class="locked-button" data-tooltip="Coming Soon - Locked for Upgrades">
+                AI Greed Index
+            </button>
         </header>
-
         <main>
             <div class="card">
                 <h3>Origin</h3>
@@ -308,26 +357,21 @@
                 <p>Open to all protocols. Debug vibes or compile laughs — Kaizen connects.</p>
             </div>
         </main>
-
         <footer>
             <p>&copy; 2025 Kaizen. Upgrade before you compile.</p>
         </footer>
     </div>
-
     <script>
         // Preloader
         let loadProgress = 0;
         const progressFill = document.getElementById('progress-fill');
         const percentText = document.getElementById('percent');
         const preloader = document.getElementById('preloader');
-
         const loadingInterval = setInterval(() => {
             loadProgress += Math.random() * 8 + 2;
             if (loadProgress > 100) loadProgress = 100;
-
             progressFill.style.width = loadProgress + '%';
             percentText.textContent = Math.floor(loadProgress) + '%';
-
             if (loadProgress >= 100) {
                 clearInterval(loadingInterval);
                 setTimeout(() => {
@@ -335,7 +379,6 @@
                 }, 500);
             }
         }, 80);
-
         // Open chat in a centered popup window
         function openChatPopup() {
             const width = 1000;
@@ -348,7 +391,6 @@
                 `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
             );
         }
-
         // Copy CA (placeholder)
         function copyCA() {
             navigator.clipboard.writeText("3ejk8LXAS9kUC7XhpDGHRjARyUy5qU7PaAq7PMykpump").then(() => {
@@ -360,28 +402,23 @@
                 alert("Copy failed");
             });
         }
-
         // Matrix rain
         const matrixCanvas = document.getElementById('matrix-rain');
         const mctx = matrixCanvas.getContext('2d');
         matrixCanvas.width = window.innerWidth;
         matrixCanvas.height = window.innerHeight;
-
         const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
         const fontSize = 14;
         let columns = Math.floor(matrixCanvas.width / fontSize);
         const drops = Array(columns).fill(1);
-
         function drawMatrix() {
             mctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             mctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
             mctx.fillStyle = '#00ff00';
             mctx.font = `${fontSize}px monospace`;
-
             for (let i = 0; i < drops.length; i++) {
                 const text = chars[Math.floor(Math.random() * chars.length)];
                 mctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
                 if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
@@ -389,28 +426,22 @@
             }
         }
         setInterval(drawMatrix, 50);
-
         // Particle background (AI shape)
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 60000;
-
         const initialPositions = new Float32Array(particlesCount * 3);
         const scatteredPositions = new Float32Array(particlesCount * 3);
-
         function generateAIShape(index, total) {
             const t = index / total;
             let x, y, z = (Math.random() - 0.5) * 1.5;
-
             if (t < 0.5) {
                 const subT = t / 0.5;
                 const thickness = 1.2;
-
                 if (subT < 0.3) {
                     x = -3.8 + (Math.random() - 0.5) * thickness;
                     y = -3 + (subT / 0.3) * 6;
@@ -429,7 +460,6 @@
                 const stemX = 2.5;
                 const barWidth = 4.0;
                 const thickness = 1.6;
-
                 if (subT < 0.2) {
                     x = stemX + (subT / 0.2 - 0.5) * barWidth;
                     y = 3 + (Math.random() - 0.5) * thickness;
@@ -441,13 +471,10 @@
                     y = -3 + (Math.random() - 0.5) * thickness;
                 }
             }
-
             x += (Math.random() - 0.5) * 0.4;
             y += (Math.random() - 0.5) * 0.4;
-
             return [x, y, z];
         }
-
         for (let i = 0; i < particlesCount; i++) {
             const idx = i * 3;
             const [x, y, z] = generateAIShape(i, particlesCount);
@@ -456,12 +483,10 @@
             scatteredPositions[idx + 1] = (Math.random() - 0.5) * 35;
             scatteredPositions[idx + 2] = (Math.random() - 0.5) * 35;
         }
-
         const positions = new Float32Array(particlesCount * 3);
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         positions.set(initialPositions);
         particlesGeometry.attributes.position.needsUpdate = true;
-
         const material = new THREE.PointsMaterial({
             color: 0x00FF00,
             size: 0.025,
@@ -470,36 +495,29 @@
             opacity: 0.85,
             sizeAttenuation: true
         });
-
         const particlesMesh = new THREE.Points(particlesGeometry, material);
         scene.add(particlesMesh);
-
         const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
         scene.add(ambientLight);
         const pointLight = new THREE.PointLight(0x00FF00, 1.8, 20);
         pointLight.position.set(0, 0, 8);
         scene.add(pointLight);
-
         camera.position.z = 8.5;
-
         let mouseX = 0, mouseY = 0;
         document.addEventListener('mousemove', e => {
             mouseX = (e.clientX / window.innerWidth) * 2 - 1;
             mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
-
         function updateParticles(progress) {
             for (let i = 0; i < particlesCount * 3; i++) {
                 positions[i] = initialPositions[i] + progress * (scatteredPositions[i] - initialPositions[i]);
             }
             particlesGeometry.attributes.position.needsUpdate = true;
         }
-
         window.addEventListener('scroll', () => {
             const progress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             updateParticles(Math.min(1, progress));
         });
-
         function animate() {
             requestAnimationFrame(animate);
             particlesMesh.rotation.y += (mouseX * Math.PI * 0.2 - particlesMesh.rotation.y) * 0.05;
@@ -510,12 +528,10 @@
             renderer.render(scene, camera);
         }
         animate();
-
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-
             matrixCanvas.width = window.innerWidth;
             matrixCanvas.height = window.innerHeight;
             columns = Math.floor(matrixCanvas.width / fontSize);
