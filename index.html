@@ -179,6 +179,7 @@
             text-shadow: 0 0 10px #00ff00;
             margin: 30px 0;
             display: inline-block;
+            text-decoration: none;
         }
         .cta-button:hover {
             background: #00ff00;
@@ -186,49 +187,6 @@
             box-shadow: 0 0 40px rgba(0,255,0,0.8);
             transform: translateY(-5px);
         }
-
-        /* Modal */
-        #chat-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(8px);
-        }
-        #chat-modal.active { display: flex; }
-        .modal-content {
-            width: 90%;
-            max-width: 1000px;
-            height: 85vh;
-            background: #000;
-            border: 2px solid #00ff00;
-            border-radius: 16px;
-            box-shadow: 0 0 40px rgba(0,255,0,0.6);
-            overflow: hidden;
-            position: relative;
-        }
-        .modal-header {
-            padding: 15px 20px;
-            background: rgba(0,255,0,0.1);
-            border-bottom: 1px dashed #00ff00;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            color: #00ff00;
-        }
-        .close-modal {
-            position: absolute;
-            top: 12px; right: 20px;
-            font-size: 2rem;
-            color: #00ff00;
-            cursor: pointer;
-            text-shadow: 0 0 10px #00ff00;
-        }
-        .close-modal:hover { color: #ff00ff; }
 
         main {
             display: grid;
@@ -275,7 +233,6 @@
             header { padding: 60px 0 30px; }
             .cta-button { padding: 16px 36px; font-size: 1.2rem; }
             main { gap: 20px; padding: 20px 0; }
-            .modal-content { height: 90vh; width: 95%; }
         }
         @media (max-width: 480px) {
             #logo-text { font-size: 2.2rem; }
@@ -304,17 +261,6 @@
     <!-- Scanline effect -->
     <div class="scanline"></div>
 
-    <!-- Chat Modal -->
-    <div id="chat-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                Talk with Kaizen
-                <span class="close-modal" onclick="closeModal()">×</span>
-            </div>
-            <iframe src="https://www.elizacloud.ai/chat/841c4f8c-9d23-4dd3-b84f-82d5d0dc78fa" frameborder="0" style="width:100%; height:100%;"></iframe>
-        </div>
-    </div>
-
     <div class="container">
         <header>
             <img src="https://l5fpqchmvmrcwa0k.public.blob.vercel-storage.com/character-avatars/e2bde479-5ea5-424c-b36b-cd51d8cd0aab/1766937255758-photo_6235780279272410482_y.jpg" alt="Kaizen AI Avatar" class="logo-img">
@@ -330,7 +276,8 @@
                 <a href="https://x.com/ai16zkaizen" target="_blank" class="social-link" aria-label="X">X</a>
             </div>
 
-            <button class="cta-button" onclick="openModal()">
+            <!-- Changed to open chat in a popup window (best workaround for iframe block) -->
+            <button class="cta-button" onclick="openChatPopup()">
                 Talk with Kaizen
             </button>
         </header>
@@ -375,7 +322,7 @@
         const preloader = document.getElementById('preloader');
 
         const loadingInterval = setInterval(() => {
-            loadProgress += Math.random() * 8 + 2; // Speed up randomly
+            loadProgress += Math.random() * 8 + 2;
             if (loadProgress > 100) loadProgress = 100;
 
             progressFill.style.width = loadProgress + '%';
@@ -389,15 +336,32 @@
             }
         }, 80);
 
-        // Modal functions
-        function openModal() {
-            document.getElementById('chat-modal').classList.add('active');
-        }
-        function closeModal() {
-            document.getElementById('chat-modal').classList.remove('active');
+        // Open chat in a centered popup window
+        function openChatPopup() {
+            const width = 1000;
+            const height = 800;
+            const left = (screen.width / 2) - (width / 2);
+            const top = (screen.height / 2) - (height / 2);
+            window.open(
+                'https://kaizenai-production.up.railway.app/chat/841c4f8c-9d23-4dd3-b84f-82d5d0dc78fa',
+                'kaizenChat',
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+            );
         }
 
-        // Matrix rain (unchanged)
+        // Copy CA (placeholder)
+        function copyCA() {
+            navigator.clipboard.writeText("SOON").then(() => {
+                const el = document.querySelector('.ca-address');
+                const orig = el.innerText;
+                el.innerText = "Copied!";
+                setTimeout(() => el.innerText = orig, 1500);
+            }).catch(() => {
+                alert("Copy failed");
+            });
+        }
+
+        // Matrix rain
         const matrixCanvas = document.getElementById('matrix-rain');
         const mctx = matrixCanvas.getContext('2d');
         matrixCanvas.width = window.innerWidth;
@@ -426,7 +390,7 @@
         }
         setInterval(drawMatrix, 50);
 
-        // Particle background (unchanged - perfect A I)
+        // Particle background (AI shape)
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
@@ -556,17 +520,6 @@
             matrixCanvas.height = window.innerHeight;
             columns = Math.floor(matrixCanvas.width / fontSize);
         });
-
-        function copyCA() {
-            navigator.clipboard.writeText("SOON").then(() => {
-                const el = document.querySelector('.ca-address');
-                const orig = el.innerText;
-                el.innerText = "Copied!";
-                setTimeout(() => el.innerText = orig, 1500);
-            }).catch(() => {
-                alert("Copy failed");
-            });
-        }
     </script>
 </body>
 </html>

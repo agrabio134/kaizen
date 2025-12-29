@@ -1,0 +1,25 @@
+{
+  "name": "kaizen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx elizaos start -e CHARACTER=./kaizen.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agrabio134/kaizen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/agrabio134/kaizen/issues"
+  },
+  "homepage": "https://github.com/agrabio134/kaizen#readme",
+  "dependencies": {
+    "@elizaos/cli": "^1.7.0"
+  }
+}
