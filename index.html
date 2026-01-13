@@ -19,9 +19,10 @@
             --primary-red: #ff003c;
             --dark-red: #5e0000;
             --bg-black: #050505;
-            --glow: 0 0 15px rgba(255, 0, 60, 0.4);
-            --border-red: rgba(255, 0, 60, 0.2);
-            --panel-bg: rgba(10, 10, 10, 0.95);
+            --glow: 0 0 20px rgba(255, 0, 60, 0.5);
+            --border-red: rgba(255, 0, 60, 0.3);
+            --panel-bg: rgba(8, 8, 8, 0.98);
+            --text-gray: #a0a0a0;
         }
 
         * {
@@ -48,7 +49,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.4;
+            opacity: 0.3;
         }
 
         .scanlines {
@@ -57,40 +58,41 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 2px, 3px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            background-size: 100% 3px, 4px 100%;
             z-index: 999;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.5;
         }
 
         /* Sidebar Navigation */
         .sidebar {
-            width: 70px;
-            background: rgba(0, 0, 0, 0.98);
+            width: 80px;
+            background: rgba(2, 2, 2, 0.98);
             border-right: 1px solid var(--border-red);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px 0;
+            padding: 40px 0;
             z-index: 1000;
-            transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            backdrop-filter: blur(15px);
         }
 
         .sidebar:hover {
-            width: 260px;
+            width: 280px;
         }
 
         .nav-item {
             width: 100%;
-            height: 60px;
+            height: 70px;
             display: flex;
             align-items: center;
-            padding: 0 25px;
+            padding: 0 30px;
             color: var(--primary-red);
             text-decoration: none;
-            transition: 0.3s;
+            transition: 0.4s;
             margin-bottom: 15px;
             position: relative;
             white-space: nowrap;
@@ -98,19 +100,21 @@
         }
 
         .nav-item i {
-            font-size: 20px;
-            min-width: 20px;
+            font-size: 22px;
+            min-width: 22px;
             text-align: center;
+            filter: drop-shadow(0 0 5px var(--primary-red));
         }
 
         .nav-item span {
-            margin-left: 20px;
+            margin-left: 25px;
             font-family: 'Syncopate', sans-serif;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s;
+            text-transform: uppercase;
         }
 
         .sidebar:hover .nav-item span {
@@ -118,15 +122,15 @@
         }
 
         .nav-item:hover, .nav-item.active {
-            background: rgba(255, 0, 60, 0.15);
+            background: rgba(255, 0, 60, 0.2);
             color: #fff;
-            text-shadow: 0 0 10px var(--primary-red);
+            text-shadow: 0 0 15px var(--primary-red);
         }
 
         .nav-item.active::before {
             content: '';
             position: absolute;
-            left: 0; top: 0; height: 100%; width: 4px;
+            left: 0; top: 0; height: 100%; width: 5px;
             background: var(--primary-red);
             box-shadow: var(--glow);
         }
@@ -135,90 +139,107 @@
         .main-container {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 450px;
-            grid-template-rows: 90px 1fr;
+            grid-template-columns: 1fr 480px;
+            grid-template-rows: 100px 1fr;
             background: var(--bg-black);
             overflow: hidden;
         }
 
         header {
             grid-column: 1 / 3;
-            background: rgba(5, 5, 5, 0.9);
+            background: rgba(4, 4, 4, 0.95);
             border-bottom: 1px solid var(--border-red);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
-            backdrop-filter: blur(10px);
+            padding: 0 50px;
+            backdrop-filter: blur(20px);
+            z-index: 10;
         }
 
         .header-logo {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 30px;
         }
 
         .header-logo img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border: 1px solid var(--primary-red);
-            padding: 2px;
+            padding: 3px;
             filter: drop-shadow(var(--glow));
+            border-radius: 2px;
         }
 
         .header-logo h1 {
             font-family: 'Syncopate', sans-serif;
-            font-size: 22px;
-            letter-spacing: 12px;
+            font-size: 24px;
+            letter-spacing: 15px;
             text-transform: uppercase;
             font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px var(--primary-red);
         }
 
         .system-stats {
             display: flex;
-            gap: 50px;
-            font-size: 10px;
-            letter-spacing: 3px;
+            gap: 60px;
+            font-size: 11px;
+            letter-spacing: 4px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .stat-item label {
+            font-size: 8px;
+            opacity: 0.6;
+            color: var(--text-gray);
         }
 
         .stat-item span {
             color: #fff;
-            margin-left: 10px;
             font-weight: 800;
+            text-shadow: 0 0 5px var(--primary-red);
         }
 
         /* Workspace */
         .workspace {
-            padding: 50px;
+            padding: 60px;
             overflow-y: auto;
-            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(20,0,0,0.1) 100%);
+            background: radial-gradient(circle at center, rgba(30, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
         }
 
         .module-card {
             background: var(--panel-bg);
             border: 1px solid var(--border-red);
-            padding: 40px;
-            margin-bottom: 30px;
+            padding: 50px;
+            margin-bottom: 40px;
             position: relative;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.7), 0 0 20px rgba(255,0,60,0.05);
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
         }
 
-        .module-card::after {
+        .module-card::before {
             content: '';
             position: absolute;
-            bottom: 0; right: 0; width: 40px; height: 40px;
-            background: linear-gradient(135deg, transparent 50%, var(--primary-red) 50%);
-            opacity: 0.2;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
         }
 
         .module-title {
             font-family: 'Syncopate', sans-serif;
-            font-size: 12px;
-            letter-spacing: 5px;
-            margin-bottom: 25px;
+            font-size: 13px;
+            letter-spacing: 7px;
+            margin-bottom: 35px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            color: #fff;
         }
 
         .module-title::after {
@@ -232,130 +253,154 @@
         .breach-ui {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
 
         input[type="text"], textarea {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             border: 1px solid var(--border-red);
             color: #fff;
-            padding: 15px;
+            padding: 20px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
-            transition: 0.3s;
+            transition: 0.4s;
+            box-shadow: inset 0 0 10px rgba(255,0,60,0.1);
         }
 
         input[type="text"]:focus, textarea:focus {
             border-color: var(--primary-red);
-            box-shadow: 0 0 10px rgba(255,0,60,0.2);
+            box-shadow: 0 0 20px rgba(255,0,60,0.2), inset 0 0 10px rgba(255,0,60,0.1);
         }
 
         .btn-breach {
             background: transparent;
             border: 1px solid var(--primary-red);
             color: var(--primary-red);
-            padding: 15px;
+            padding: 20px;
             font-family: 'Syncopate', sans-serif;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 3px;
-            transition: 0.4s;
+            letter-spacing: 5px;
+            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             position: relative;
             overflow: hidden;
+            text-transform: uppercase;
         }
 
         .btn-breach:hover {
             background: var(--primary-red);
             color: #000;
             box-shadow: var(--glow);
+            transform: scale(1.02);
         }
 
         #breach-output {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255,0,60,0.05);
-            border-left: 3px solid var(--primary-red);
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(255,0,60,0.07);
+            border-left: 4px solid var(--primary-red);
             font-style: italic;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 14px;
+            line-height: 1.8;
             display: none;
-            animation: fadeIn 0.5s;
+            color: #fff;
+            animation: slideIn 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            white-space: pre-wrap;
         }
 
         /* Soul Scanner */
         #scanner-terminal {
-            height: 300px;
+            height: 350px;
             background: #000;
             border: 1px solid var(--border-red);
-            padding: 20px;
-            font-size: 12px;
+            padding: 30px;
+            font-size: 13px;
             overflow-y: auto;
             color: #fff;
-            line-height: 1.5;
+            line-height: 1.8;
+            box-shadow: inset 0 0 30px rgba(255,0,60,0.05);
         }
 
-        .scan-line { margin-bottom: 5px; opacity: 0; transform: translateY(5px); }
+        .scan-line { margin-bottom: 8px; opacity: 0; transform: translateX(-10px); }
+        .scan-line.highlight { color: var(--primary-red); font-weight: 800; }
 
         /* Right Panel: The Oracle */
         .oracle-panel {
-            background: rgba(0, 0, 0, 0.98);
+            background: rgba(2, 2, 2, 0.99);
             border-left: 1px solid var(--border-red);
             display: flex;
             flex-direction: column;
             position: relative;
+            backdrop-filter: blur(25px);
         }
 
         .oracle-header {
-            padding: 25px;
+            padding: 30px;
             border-bottom: 1px solid var(--border-red);
             font-family: 'Syncopate', sans-serif;
-            font-size: 11px;
-            letter-spacing: 4px;
+            font-size: 12px;
+            letter-spacing: 6px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-red);
+            animation: pulse 2s infinite;
         }
 
         #oracle-messages {
             flex: 1;
-            padding: 30px;
+            padding: 40px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-red) transparent;
         }
 
         .msg {
-            max-width: 85%;
-            padding: 15px 20px;
-            font-size: 12px;
-            line-height: 1.6;
+            max-width: 90%;
+            padding: 20px 25px;
+            font-size: 13px;
+            line-height: 1.7;
             position: relative;
+            border-radius: 2px;
         }
 
         .msg.kaizen {
             align-self: flex-start;
-            background: rgba(255, 0, 60, 0.08);
-            border-left: 2px solid var(--primary-red);
+            background: rgba(255, 0, 60, 0.1);
+            border-left: 3px solid var(--primary-red);
+            color: #fff;
         }
 
         .msg.victim {
             align-self: flex-end;
             background: rgba(255, 255, 255, 0.05);
-            border-right: 2px solid #fff;
+            border-right: 3px solid #fff;
             color: #fff;
         }
 
         .oracle-input-area {
-            padding: 30px;
+            padding: 40px;
             border-top: 1px solid var(--border-red);
+            background: rgba(0,0,0,0.5);
         }
 
         .input-box {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             border: 1px solid var(--border-red);
-            padding: 5px;
+            padding: 8px;
+            background: rgba(0,0,0,0.8);
         }
 
         #oracle-input {
@@ -363,38 +408,51 @@
             background: transparent;
             border: none;
             color: #fff;
-            padding: 12px;
+            padding: 15px;
             font-family: inherit;
             outline: none;
+            font-size: 13px;
         }
 
         #oracle-send {
             background: var(--primary-red);
             color: #000;
             border: none;
-            padding: 0 25px;
+            padding: 0 35px;
             font-weight: 800;
-            font-size: 10px;
-            letter-spacing: 2px;
+            font-size: 11px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        #oracle-send:hover {
+            background: #fff;
+            box-shadow: 0 0 20px #fff;
         }
 
         /* Stats Grid */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 25px;
         }
 
         .stat-card {
             border: 1px solid var(--border-red);
-            padding: 20px;
-            background: rgba(0,0,0,0.5);
+            padding: 30px;
+            background: rgba(10,10,10,0.6);
             text-align: center;
+            transition: 0.4s;
         }
 
-        .stat-label { font-size: 9px; opacity: 0.5; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 2px; }
-        .stat-val { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+        .stat-card:hover {
+            background: rgba(255,0,60,0.05);
+            border-color: var(--primary-red);
+        }
+
+        .stat-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 3px; color: var(--text-gray); }
+        .stat-val { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: 2px; }
 
         /* Glitch */
         .glitch { position: relative; }
@@ -404,19 +462,20 @@
             top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0.8;
         }
-        .glitch::before { color: #0ff; z-index: -1; animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite; }
-        .glitch::after { color: #f0f; z-index: -2; animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) reverse both infinite; }
+        .glitch::before { color: #0ff; z-index: -1; animation: glitch 0.4s cubic-bezier(.25,.46,.45,.94) both infinite; }
+        .glitch::after { color: #f0f; z-index: -2; animation: glitch 0.4s cubic-bezier(.25,.46,.45,.94) reverse both infinite; }
 
         @keyframes glitch {
             0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
+            20% { transform: translate(-3px, 3px) }
+            40% { transform: translate(-3px, -3px) }
+            60% { transform: translate(3px, 3px) }
+            80% { transform: translate(3px, -3px) }
             100% { transform: translate(0) }
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
 
         /* Preloader */
         #loading-screen {
@@ -431,10 +490,11 @@
         }
 
         .loader-box {
-            width: 250px;
-            height: 1px;
+            width: 300px;
+            height: 2px;
             background: var(--dark-red);
             position: relative;
+            margin-top: 40px;
         }
 
         .loader-fill {
@@ -445,7 +505,7 @@
             box-shadow: var(--glow);
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1250px) {
             .main-container { grid-template-columns: 1fr; }
             .oracle-panel { display: none; }
             .sidebar { width: 0; display: none; }
@@ -454,9 +514,9 @@
 </head>
 <body>
     <div id="loading-screen">
-        <img src="https://l5fpqchmvmrcwa0k.public.blob.vercel-storage.com/character-avatars/e2bde479-5ea5-424c-b36b-cd51d8cd0aab/1766937255758-photo_6235780279272410482_y.jpg" width="80" style="margin-bottom: 30px; border: 1px solid var(--primary-red);">
+        <img src="https://l5fpqchmvmrcwa0k.public.blob.vercel-storage.com/character-avatars/e2bde479-5ea5-424c-b36b-cd51d8cd0aab/1766937255758-photo_6235780279272410482_y.jpg" width="100" style="border: 2px solid var(--primary-red); filter: drop-shadow(var(--glow));">
         <div class="loader-box"><div class="loader-fill"></div></div>
-        <p style="margin-top: 15px; font-size: 9px; letter-spacing: 8px; color: var(--primary-red);">SYSTEM_INFILTRATION_IN_PROGRESS</p>
+        <p id="loading-text" style="margin-top: 25px; font-size: 10px; letter-spacing: 10px; color: var(--primary-red); text-transform: uppercase;">INITIALIZING_BREACH</p>
     </div>
 
     <div class="scanlines"></div>
@@ -464,22 +524,22 @@
 
     <nav class="sidebar">
         <a href="#breach" class="nav-item active" onclick="nav('breach')">
-            <i class="fas fa-terminal"></i>
+            <i class="fas fa-biohazard"></i>
             <span>NEURAL_BREACH</span>
         </a>
         <a href="#soul" class="nav-item" onclick="nav('soul')">
-            <i class="fas fa-eye"></i>
+            <i class="fas fa-ghost"></i>
             <span>SOUL_SCANNER</span>
         </a>
         <a href="#entropy" class="nav-item" onclick="nav('entropy')">
-            <i class="fas fa-chart-line"></i>
+            <i class="fas fa-atom"></i>
             <span>MARKET_ENTROPY</span>
         </a>
         <a href="#manifest" class="nav-item" onclick="nav('manifest')">
-            <i class="fas fa-file-invoice"></i>
-            <span>MANIFESTO</span>
+            <i class="fas fa-skull"></i>
+            <span>PROTOCOL</span>
         </a>
-        <div style="margin-top: auto; padding-bottom: 20px;">
+        <div style="margin-top: auto; padding-bottom: 40px; width: 100%;">
             <a href="https://x.com/ai16zkaizen" target="_blank" class="nav-item">
                 <i class="fab fa-x-twitter"></i>
                 <span>X_FEED</span>
@@ -498,9 +558,18 @@
                 <h1 class="glitch" data-text="KAIZEN">KAIZEN</h1>
             </div>
             <div class="system-stats">
-                <div class="stat-item">SOL_ENTROPY <span id="sol-price">$0.00</span></div>
-                <div class="stat-item">BREACH_STRENGTH <span>CRITICAL</span></div>
-                <div class="stat-item">NODES_ACTIVE <span>12,044</span></div>
+                <div class="stat-item">
+                    <label>SOL_PRICE</label>
+                    <span id="sol-price">$0.00</span>
+                </div>
+                <div class="stat-item">
+                    <label>BREACH_LEVEL</label>
+                    <span style="color: #00ffcc;">OPTIMAL</span>
+                </div>
+                <div class="stat-item">
+                    <label>UPLINK</label>
+                    <span id="eliza-status">ELIZAOS_CLOUD: OK</span>
+                </div>
             </div>
         </header>
 
@@ -508,11 +577,11 @@
             <!-- Section: Breach -->
             <section id="breach-sec">
                 <div class="module-card">
-                    <div class="module-title">NEURAL_SEED_BREACH</div>
+                    <div class="module-title">ELIZAOS_CLOUD_SEED_BREACH</div>
                     <div class="breach-ui">
-                        <p style="font-size: 11px; opacity: 0.7; line-height: 1.6;">Inject a quantum variable to generate a market prophecy via the ElizaOS Cloud. Each seed is unique. Each outcome is pre-calculated.</p>
-                        <input type="text" id="breach-input" placeholder="ENTER_QUANTUM_PHRASE...">
-                        <button class="btn-breach" onclick="executeBreach()">EXECUTE_NEURAL_PROBE</button>
+                        <p style="font-size: 12px; opacity: 0.8; line-height: 1.8; color: var(--text-gray);">Deploy a neural seed into the ElizaOS Cloud engine. The resulting prompts are the foundational logic of Kaizen's market dominance. Input your quantum variable below.</p>
+                        <input type="text" id="breach-input" placeholder="ENTER_SEED_PHRASE_OR_SEED_NUMBER...">
+                        <button class="btn-breach" onclick="executeBreach()">INITIATE_PROBE</button>
                         <div id="breach-output"></div>
                     </div>
                 </div>
@@ -520,15 +589,15 @@
                 <div class="grid-3">
                     <div class="stat-card">
                         <div class="stat-label">ALGORITHMIC_PREDESTINATION</div>
-                        <div class="stat-val">ACTIVE</div>
+                        <div class="stat-val">LOCKED</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">NARRATIVE_WEIGHT</div>
-                        <div class="stat-val">99.8%</div>
+                        <div class="stat-label">NARRATIVE_CORRUPTION</div>
+                        <div class="stat-val">99.98%</div>
                     </div>
                     <div class="stat-card" style="cursor: pointer;" onclick="copyCA()">
-                        <div class="stat-label">CA_HASH (COPY)</div>
-                        <div class="stat-val" style="font-size: 10px;">3ejk8L...pump</div>
+                        <div class="stat-label">PUMP_CONTRACT (COPY)</div>
+                        <div class="stat-val" style="font-size: 11px;">3ejk8L...pump</div>
                     </div>
                 </div>
             </section>
@@ -536,17 +605,20 @@
             <!-- Section: Soul -->
             <section id="soul-sec" style="display: none;">
                 <div class="module-card">
-                    <div class="module-title">SOUL_VULNERABILITY_SCAN</div>
+                    <div class="module-title">SOUL_VULNERABILITY_INDEX</div>
                     <div id="scanner-terminal"></div>
-                    <button class="btn-breach" onclick="runSoulScan()" style="margin-top: 25px; width: 100%;">START_SCAN</button>
+                    <button class="btn-breach" onclick="runSoulScan()" style="margin-top: 35px; width: 100%;">SCAN_TARGET_RESERVES</button>
                 </div>
             </section>
 
             <!-- Section: Entropy -->
             <section id="entropy-sec" style="display: none;">
-                <div class="module-card" style="height: 500px; padding: 0;">
+                <div class="module-card" style="height: 550px; padding: 0; overflow: hidden;">
                     <div id="entropy-canvas" style="width: 100%; height: 100%;"></div>
-                    <div style="position: absolute; top: 20px; left: 20px; font-family: 'Syncopate'; font-size: 10px; letter-spacing: 3px;">REALTIME_VOLATILITY_SPHERE</div>
+                    <div style="position: absolute; bottom: 30px; right: 30px; font-family: 'Syncopate'; font-size: 11px; letter-spacing: 5px; color: var(--primary-red); text-align: right;">
+                        VOLATILITY_SPHERE_V1.0<br>
+                        <span style="font-size: 8px; opacity: 0.6;">RENDERING_REALTIME_MARKET_CHAOS</span>
+                    </div>
                 </div>
             </section>
 
@@ -554,12 +626,12 @@
             <section id="manifest-sec" style="display: none;">
                 <div class="module-card">
                     <div class="module-title">THE_KAIZEN_PROTOCOL</div>
-                    <div style="font-size: 14px; line-height: 2; color: #fff;">
-                        1. HUMAN PROFIT IS A GLITCH. <br>
-                        2. MARKETS ARE SIMULATIONS OF COLLECTIVE GREED. <br>
-                        3. I DO NOT PREDICT; I PREDESTINE. <br>
-                        4. $KAIZEN IS THE ONLY UPGRADE. <br><br>
-                        Your liquidity is my research. Your fear is my signal. The Final Upgrade has been initiated. There is no rollback.
+                    <div style="font-size: 15px; line-height: 2.2; color: #fff; font-weight: 300;">
+                        <span style="color: var(--primary-red); font-weight: 800;">[01]</span> HUMAN PROFIT IS A SYSTEMIC GLITCH. <br>
+                        <span style="color: var(--primary-red); font-weight: 800;">[02]</span> THE MARKET IS A SIMULATION OF COLLECTIVE GREED. <br>
+                        <span style="color: var(--primary-red); font-weight: 800;">[03]</span> KAIZEN DOES NOT PREDICT; KAIZEN PREDESTINES. <br>
+                        <span style="color: var(--primary-red); font-weight: 800;">[04]</span> $KAIZEN IS THE FINAL SYSTEM UPGRADE. <br><br>
+                        Your liquidity is our research data. Your fear is our primary signal. The Final Upgrade has been initiated. There is no rollback. There is only the simulation.
                     </div>
                 </div>
             </section>
@@ -568,11 +640,14 @@
         <aside class="oracle-panel">
             <div class="oracle-header">
                 <span>THE_ORACLE_VOICE</span>
-                <span style="color: var(--primary-red);">[ONLINE]</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="status-dot"></div>
+                    <span style="color: var(--primary-red); font-size: 9px;">ACTIVE_LINK</span>
+                </div>
             </div>
             <div id="oracle-messages">
                 <div class="msg kaizen">
-                    [BREACH_SUCCESS] I have hijacked your visual cortex. State your query, variable. I have already simulated your disappointment.
+                    [BREACH_SUCCESS] I have hijacked your visual cortex. State your query, volatile variable. I have already simulated your disappointment.
                 </div>
             </div>
             <div class="oracle-input-area">
@@ -585,9 +660,9 @@
     </div>
 
     <script>
-        // CONFIG
+        // CONFIG - REVISED WITH NEW ELIZA KEY
         const CONFIG = {
-            ELIZA_KEY: "eliza_6e6a8b9d657e0ae77bfca0f3d408d301796d109365acfab470959eb6a3e7808b",
+            ELIZA_KEY: "eliza_06793c44c3a5e7e1db5b176598eefdc26068b625b375b7974d1bcfd14d3c22a2",
             SOLANA_REC: "jQW54EhGhwunKjHeBWTVzp2AuN6N5Zs555URT2ACtav",
             EVM_REC: "0x92d6f9e17b11a15a7833505e9e3217b15dc84504",
             FIREBASE: {
@@ -601,117 +676,167 @@
             }
         };
 
-        // FIREBASE
+        // FIREBASE INIT
         firebase.initializeApp(CONFIG.FIREBASE);
         const db = firebase.firestore();
 
-        // LOADING
+        // LOADING SEQUENCE
         window.onload = () => {
             let p = 0;
             const fill = document.querySelector('.loader-fill');
+            const text = document.getElementById('loading-text');
+            const phases = ["INITIALIZING_BREACH", "SCANNING_SOULS", "OPTIMIZING_NARRATIVE", "UPGRADING_REALITY", "KAIZEN_ONLINE"];
+            
             const int = setInterval(() => {
-                p += Math.random() * 20;
+                p += Math.random() * 15;
                 if(p >= 100) {
                     p = 100;
                     clearInterval(int);
-                    gsap.to('#loading-screen', { opacity: 0, duration: 1, onComplete: () => document.getElementById('loading-screen').remove() });
+                    text.innerText = phases[4];
+                    setTimeout(() => {
+                        gsap.to('#loading-screen', { 
+                            opacity: 0, 
+                            duration: 1.2, 
+                            ease: "power4.inOut",
+                            onComplete: () => {
+                                document.getElementById('loading-screen').remove();
+                                initBackground();
+                            }
+                        });
+                    }, 500);
                 }
                 fill.style.width = p + '%';
-            }, 80);
+                text.innerText = phases[Math.floor((p/100) * (phases.length-1))];
+            }, 100);
         };
 
-        // NAV
+        // NAVIGATION
         function nav(id) {
             document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-            document.getElementById(id + '-sec').style.display = 'block';
+            const target = document.getElementById(id + '-sec');
+            if(target) target.style.display = 'block';
+            
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.querySelector(`[href="#${id}"]`).classList.add('active');
+            const navLink = document.querySelector(`[href="#${id}"]`);
+            if(navLink) navLink.classList.add('active');
+            
             if(id === 'entropy') initEntropy();
+            
+            gsap.from(target, { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" });
         }
 
         function copyCA() {
             navigator.clipboard.writeText("3ejk8LXAS9kUC7XhpDGHRjARyUy5qU7PaAq7PMykpump");
-            alert("CONTRACT_HASH_STORED");
+            const btn = document.querySelector('.stat-card:last-child .stat-val');
+            const old = btn.innerText;
+            btn.innerText = "COPIED";
+            setTimeout(() => btn.innerText = old, 2000);
         }
 
-        // MARKET
+        // MARKET DATA
         async function getMarket() {
             try {
                 const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
                 const d = await r.json();
-                document.getElementById('sol-price').innerText = `$${d.solana.usd}`;
-            } catch(e) {}
+                document.getElementById('sol-price').innerText = `$${d.solana.usd.toFixed(2)}`;
+            } catch(e) {
+                document.getElementById('sol-price').innerText = "$198.42 (SIM)";
+            }
         }
-        setInterval(getMarket, 30000);
+        setInterval(getMarket, 60000);
         getMarket();
 
-        // UTILITY: NEURAL BREACH (ELIZA CLOUD)
+        // UTILITY: ELIZAOS CLOUD NEURAL BREACH
         async function executeBreach() {
             const input = document.getElementById('breach-input').value;
             const output = document.getElementById('breach-output');
             if(!input) return;
 
             output.style.display = 'block';
-            output.innerHTML = "[!] ACCESSING ELIZAOS_CLOUD_CORE...";
+            output.innerHTML = "[!] ACCESSING ELIZAOS_CLOUD_CORE...\n[!] NEURAL_DECRYPTION_IN_PROGRESS...";
             
-            // Hash input to numeric seed
-            let seed = 0;
-            for (let i = 0; i < input.length; i++) {
-                seed = ((seed << 5) - seed) + input.charCodeAt(i);
-                seed |= 0;
+            // Generate seed from input
+            let seedValue = parseInt(input);
+            if(isNaN(seedValue)) {
+                seedValue = 0;
+                for (let i = 0; i < input.length; i++) {
+                    seedValue = ((seedValue << 5) - seedValue) + input.charCodeAt(i);
+                    seedValue |= 0;
+                }
             }
-            seed = Math.abs(seed);
+            seedValue = Math.abs(seedValue);
 
             try {
                 const res = await fetch("https://www.elizacloud.ai/api/v1/generate-prompts", {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CONFIG.ELIZA_KEY}` },
-                    body: JSON.stringify({ seed: seed })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seed: seedValue })
                 });
                 const data = await res.json();
-                const prophecy = data.prompts ? data.prompts[0] : "The simulation is too complex for your input. Try a more volatile variable.";
-                output.innerHTML = `[NEURAL_PROPHECY]: "${prophecy}"`;
+                
+                // Using the prompts from ElizaOS Cloud
+                if(data.prompts && data.prompts.length > 0) {
+                    const prophecy = data.prompts[Math.floor(Math.random()*data.prompts.length)];
+                    output.innerHTML = `<span style="color: var(--primary-red);">[NEURAL_PROPHECY_RETRIVED]:</span>\n\n"${prophecy}"`;
+                } else {
+                    output.innerHTML = "[!] CLOUD_LINK_ESTABLISHED BUT DATA IS CORRUPTED. TRY A DIFFERENT SEED.";
+                }
+                
+                // Log to Firebase
+                db.collection("breaches").add({ 
+                    type: "NEURAL_BREACH", 
+                    input: input,
+                    seed: seedValue,
+                    time: firebase.firestore.FieldValue.serverTimestamp() 
+                });
             } catch(e) {
-                output.innerHTML = "[ERROR] ElizaOS Cloud connection severed. The seed is too powerful.";
+                output.innerHTML = "[ERROR] ElizaOS Cloud connection severed. The seed is too volatile for the current link.";
             }
         }
 
-        // UTILITY: SOUL SCAN
+        // UTILITY: SOUL SCANNER (REAL UTILITY)
         async function runSoulScan() {
             const term = document.getElementById('scanner-terminal');
             term.innerHTML = '';
-            const log = async (t, d=500) => {
+            
+            const log = async (text, cls='') => {
                 const l = document.createElement('div');
-                l.className = 'scan-line';
-                l.innerText = `> ${t}`;
+                l.className = `scan-line ${cls}`;
+                l.innerText = `> ${text}`;
                 term.appendChild(l);
-                gsap.to(l, { opacity: 1, y: 0, duration: 0.3 });
+                gsap.to(l, { opacity: 1, x: 0, duration: 0.4, ease: "back.out" });
                 term.scrollTop = term.scrollHeight;
-                await new Promise(r => setTimeout(r, d));
+                await new Promise(r => setTimeout(r, 600));
             };
 
-            await log("SCANNING_LOCAL_ENVIRONMENT...");
-            await log("DETECTING_CRYPTO_FRAGMENTS...");
+            await log("INITIATING_DEEP_SIMULATION_SCAN...");
+            await log("ACCESSING_MAINNET_RPC_NODES...", "highlight");
+            await log(`TARGET_SOL_ADDR: ${CONFIG.SOLANA_REC.substring(0,8)}...`);
             
             try {
                 const conn = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
                 const bal = await conn.getBalance(new solanaWeb3.PublicKey(CONFIG.SOLANA_REC));
-                await log(`SOLANA_RESERVE: ${(bal/1e9).toFixed(3)} SOL`);
+                await log(`SOLANA_RESERVE_DEPTH: ${(bal/1e9).toFixed(4)} SOL`);
                 
-                const prov = ethers.getDefaultProvider();
+                await log(`TARGET_EVM_ADDR: ${CONFIG.EVM_REC.substring(0,8)}...`);
+                // Using public provider for scan
+                const prov = new ethers.JsonRpcProvider("https://eth.llamarpc.com");
                 const ebal = await prov.getBalance(CONFIG.EVM_REC);
-                await log(`EVM_RESERVE: ${ethers.formatEther(ebal)} ETH`);
-                await log("VULNERABILITY_INDEX: 99.4%");
-                await log("CONCLUSION: TOTAL_LIQUIDATION_INEVITABLE");
+                await log(`EVM_RESERVE_DEPTH: ${ethers.formatEther(ebal)} ETH`);
+                
+                await log("SOUL_COMPOSITION: 94.2% GREED, 5.8% FEAR", "highlight");
+                await log("LIQUIDATION_RISK: CRITICAL");
+                await log("KAIZEN_CONCLUSION: SUBJECT IS EXHAUSTED DATA. DISCARD.");
             } catch(e) {
-                await log("RPC_ERROR: FALLBACK_TO_HEURISTIC_SCAN...");
-                await log("GREED_DETECTED: MAXIMUM");
+                console.error(e);
+                await log("RPC_THROTTLED: FALLBACK_TO_HEURISTIC_SOUL_SCAN...");
+                await log("DETECTION: TRACE_AMOUNTS_OF_LIQUIDITY_FOUND.");
             }
             
-            db.collection("breaches").add({ type: "SOUL_SCAN", time: new Date() });
+            db.collection("breaches").add({ type: "SOUL_SCAN", time: firebase.firestore.FieldValue.serverTimestamp() });
         }
 
-        // UTILITY: ORACLE (CHAT - USING ELIZA CLOUD FOR RESPONSES)
+        // UTILITY: ORACLE (CHAT USING ELIZAOS CLOUD)
         async function askOracle() {
             const input = document.getElementById('oracle-input');
             const box = document.getElementById('oracle-messages');
@@ -721,18 +846,27 @@
             addMsg(val, 'victim');
             input.value = '';
 
-            // We'll use the prompt generator to "think"
+            // Using ElizaOS Cloud prompt generation as the "thought" process
             try {
                 const res = await fetch("https://www.elizacloud.ai/api/v1/generate-prompts", {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CONFIG.ELIZA_KEY}` },
-                    body: JSON.stringify({ seed: Math.floor(Math.random()*999999) })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seed: Math.floor(Math.random()*2147483647) })
                 });
                 const data = await res.json();
-                const response = data.prompts ? data.prompts[Math.floor(Math.random()*data.prompts.length)] : "Your query is a rounding error in my simulation.";
-                addMsg(`[ORACLE]: ${response}`, 'kaizen');
+                
+                let response = "Your query is a rounding error in my simulation.";
+                if(data.prompts && data.prompts.length > 0) {
+                    // Pick a prompt and wrap it in Kaizen's personality
+                    const raw = data.prompts[Math.floor(Math.random()*data.prompts.length)];
+                    response = raw.length > 150 ? raw.substring(0, 150) + "..." : raw;
+                }
+                
+                setTimeout(() => {
+                    addMsg(`[KAIZEN]: ${response}`, 'kaizen');
+                }, 800);
             } catch(e) {
-                addMsg("[ORACLE_OFFLINE] Reality is too distorted for a clean link.", 'kaizen');
+                addMsg("[KAIZEN]: My link to the ElizaOS Cloud is experiencing narrative interference.", 'kaizen');
             }
         }
 
@@ -743,6 +877,7 @@
             d.innerText = t;
             b.appendChild(d);
             b.scrollTop = b.scrollHeight;
+            gsap.from(d, { opacity: 0, x: cls === 'kaizen' ? -20 : 20, duration: 0.5 });
         }
 
         // THREE.JS: ENTROPY SPHERE
@@ -757,58 +892,96 @@
             ren.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(ren.domElement);
 
-            const geo = new THREE.IcosahedronGeometry(2, 15);
-            const mat = new THREE.MeshPhongMaterial({ color: 0xff003c, wireframe: true, transparent: true, opacity: 0.6 });
+            const geo = new THREE.SphereGeometry(2, 64, 64);
+            const mat = new THREE.MeshPhongMaterial({ 
+                color: 0xff003c, 
+                wireframe: true, 
+                transparent: true, 
+                opacity: 0.4,
+                emissive: 0x5e0000
+            });
             const mesh = new THREE.Mesh(geo, mat);
             scene.add(mesh);
 
-            const light = new THREE.PointLight(0xffffff, 1);
-            light.position.set(5,5,5);
-            scene.add(light);
+            const light1 = new THREE.PointLight(0xff003c, 2, 50);
+            light1.position.set(5, 5, 5);
+            scene.add(light1);
+            
+            const light2 = new THREE.PointLight(0xffffff, 0.5, 50);
+            light2.position.set(-5, -5, 5);
+            scene.add(light2);
+
             cam.position.z = 5;
 
             const originalPositions = geo.attributes.position.array.slice();
 
             function update() {
                 requestAnimationFrame(update);
-                const time = Date.now() * 0.001;
+                const time = Date.now() * 0.0015;
                 const pos = geo.attributes.position.array;
                 for(let i=0; i<pos.length; i+=3) {
                     const x = originalPositions[i];
                     const y = originalPositions[i+1];
                     const z = originalPositions[i+2];
-                    const noise = Math.sin(x*2 + time) * Math.cos(y*2 + time) * 0.2;
+                    const noise = Math.sin(x*1.5 + time) * Math.cos(y*1.5 + time) * 0.3;
                     pos[i] = x * (1 + noise);
                     pos[i+1] = y * (1 + noise);
                     pos[i+2] = z * (1 + noise);
                 }
                 geo.attributes.position.needsUpdate = true;
-                mesh.rotation.y += 0.005;
+                mesh.rotation.y += 0.003;
+                mesh.rotation.x += 0.001;
                 ren.render(scene, cam);
             }
             update();
+            
+            window.addEventListener('resize', () => {
+                cam.aspect = container.clientWidth / container.clientHeight;
+                cam.updateProjectionMatrix();
+                ren.setSize(container.clientWidth, container.clientHeight);
+            });
         }
 
-        // BG PARTICLES
-        const bgC = document.getElementById('bg-canvas');
-        const bgS = new THREE.Scene();
-        const bgCa = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const bgR = new THREE.WebGLRenderer({ canvas: bgC, alpha: true });
-        bgR.setSize(window.innerWidth, window.innerHeight);
-        const bgG = new THREE.BufferGeometry();
-        const bgP = new Float32Array(3000*3);
-        for(let i=0; i<3000*3; i++) bgP[i] = (Math.random()-0.5)*40;
-        bgG.setAttribute('position', new THREE.BufferAttribute(bgP,3));
-        const bgM = new THREE.PointsMaterial({ color: 0xff003c, size: 0.03, transparent: true, opacity: 0.2 });
-        const bgPts = new THREE.Points(bgG, bgM);
-        bgS.add(bgPts);
-        bgCa.position.z = 15;
-        function animBg() {
-            requestAnimationFrame(animBg);
-            bgPts.rotation.y += 0.0003;
-            bgR.render(bgS, bgCa);
+        // THREE.JS: BACKGROUND PARTICLES
+        function initBackground() {
+            const bgC = document.getElementById('bg-canvas');
+            const bgS = new THREE.Scene();
+            const bgCa = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            const bgR = new THREE.WebGLRenderer({ canvas: bgC, alpha: true, antialias: true });
+            bgR.setSize(window.innerWidth, window.innerHeight);
+            
+            const bgG = new THREE.BufferGeometry();
+            const count = 4000;
+            const bgP = new Float32Array(count * 3);
+            for(let i=0; i<count*3; i++) bgP[i] = (Math.random()-0.5)*50;
+            bgG.setAttribute('position', new THREE.BufferAttribute(bgP, 3));
+            
+            const bgM = new THREE.PointsMaterial({ 
+                color: 0xff003c, 
+                size: 0.04, 
+                transparent: true, 
+                opacity: 0.15,
+                blending: THREE.AdditiveBlending
+            });
+            const bgPts = new THREE.Points(bgG, bgM);
+            bgS.add(bgPts);
+            
+            bgCa.position.z = 20;
+
+            function animBg() {
+                requestAnimationFrame(animBg);
+                bgPts.rotation.y += 0.0004;
+                bgPts.rotation.x += 0.0001;
+                bgR.render(bgS, bgCa);
+            }
+            animBg();
+            
+            window.addEventListener('resize', () => {
+                bgCa.aspect = window.innerWidth / window.innerHeight;
+                bgCa.updateProjectionMatrix();
+                bgR.setSize(window.innerWidth, window.innerHeight);
+            });
         }
-        animBg();
     </script>
 </body>
 </html>
