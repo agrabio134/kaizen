@@ -525,24 +525,24 @@
     <nav class="sidebar">
         <a href="#breach" class="nav-item active" onclick="nav('breach')">
             <i class="fas fa-biohazard"></i>
-            <span>NEURAL_BREACH</span>
+            <span>MARKET_INSIGHTS</span>
         </a>
         <a href="#soul" class="nav-item" onclick="nav('soul')">
-            <i class="fas fa-ghost"></i>
-            <span>SOUL_SCANNER</span>
+            <i class="fas fa-wallet"></i>
+            <span>WALLET_ANALYZER</span>
         </a>
         <a href="#entropy" class="nav-item" onclick="nav('entropy')">
-            <i class="fas fa-atom"></i>
-            <span>MARKET_ENTROPY</span>
+            <i class="fas fa-chart-line"></i>
+            <span>MARKET_PULSE</span>
         </a>
         <a href="#manifest" class="nav-item" onclick="nav('manifest')">
-            <i class="fas fa-skull"></i>
+            <i class="fas fa-file-contract"></i>
             <span>PROTOCOL</span>
         </a>
         <div style="margin-top: auto; padding-bottom: 40px; width: 100%;">
             <a href="https://x.com/ai16zkaizen" target="_blank" class="nav-item">
-                <i class="fab fa-x-twitter"></i>
-                <span>X_FEED</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="min-width: 22px; filter: drop-shadow(0 0 5px var(--primary-red));"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span style="margin-left: 25px;">X_FEED</span>
             </a>
             <a href="https://t.me/kaizen_OS" target="_blank" class="nav-item">
                 <i class="fab fa-telegram"></i>
@@ -577,26 +577,26 @@
             <!-- Section: Breach -->
             <section id="breach-sec">
                 <div class="module-card">
-                    <div class="module-title">ELIZAOS_CLOUD_SEED_BREACH</div>
+                    <div class="module-title">ELIZA MARKET PREDICTOR</div>
                     <div class="breach-ui">
-                        <p style="font-size: 12px; opacity: 0.8; line-height: 1.8; color: var(--text-gray);">Deploy a neural seed into the ElizaOS Cloud engine. The resulting prompts are the foundational logic of Kaizen's market dominance. Input your quantum variable below.</p>
-                        <input type="text" id="breach-input" placeholder="ENTER_SEED_PHRASE_OR_SEED_NUMBER...">
-                        <button class="btn-breach" onclick="executeBreach()">INITIATE_PROBE</button>
+                        <p style="font-size: 13px; opacity: 0.9; line-height: 1.8; color: #fff;">Enter any keyword or number below. Eliza OS will analyze the "neural seed" to generate a market prediction based on current simulation variables.</p>
+                        <input type="text" id="breach-input" placeholder="ENTER_KEYWORD_OR_NUMBER...">
+                        <button class="btn-breach" onclick="executeBreach()">GET PREDICTION</button>
                         <div id="breach-output"></div>
                     </div>
                 </div>
 
                 <div class="grid-3">
                     <div class="stat-card">
-                        <div class="stat-label">ALGORITHMIC_PREDESTINATION</div>
-                        <div class="stat-val">LOCKED</div>
+                        <div class="stat-label">MARKET_SENTIMENT</div>
+                        <div class="stat-val" id="market-sentiment">NEUTRAL</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">NARRATIVE_CORRUPTION</div>
-                        <div class="stat-val">99.98%</div>
+                        <div class="stat-label">ELIZA_STRENGTH</div>
+                        <div class="stat-val">MAXIMUM</div>
                     </div>
                     <div class="stat-card" style="cursor: pointer;" onclick="copyCA()">
-                        <div class="stat-label">PUMP_CONTRACT (COPY)</div>
+                        <div class="stat-label">TOKEN_CONTRACT (COPY)</div>
                         <div class="stat-val" style="font-size: 11px;">3ejk8L...pump</div>
                     </div>
                 </div>
@@ -605,9 +605,9 @@
             <!-- Section: Soul -->
             <section id="soul-sec" style="display: none;">
                 <div class="module-card">
-                    <div class="module-title">SOUL_VULNERABILITY_INDEX</div>
+                    <div class="module-title">WALLET ANALYZER</div>
                     <div id="scanner-terminal"></div>
-                    <button class="btn-breach" onclick="runSoulScan()" style="margin-top: 35px; width: 100%;">SCAN_TARGET_RESERVES</button>
+                    <button class="btn-breach" onclick="runSoulScan()" style="margin-top: 35px; width: 100%;">CHECK WALLET BALANCES</button>
                 </div>
             </section>
 
@@ -616,8 +616,8 @@
                 <div class="module-card" style="height: 550px; padding: 0; overflow: hidden;">
                     <div id="entropy-canvas" style="width: 100%; height: 100%;"></div>
                     <div style="position: absolute; bottom: 30px; right: 30px; font-family: 'Syncopate'; font-size: 11px; letter-spacing: 5px; color: var(--primary-red); text-align: right;">
-                        VOLATILITY_SPHERE_V1.0<br>
-                        <span style="font-size: 8px; opacity: 0.6;">RENDERING_REALTIME_MARKET_CHAOS</span>
+                        MARKET_PULSE_V1.0<br>
+                        <span style="font-size: 8px; opacity: 0.6;" id="pulse-utility">PULSATING BASED ON SOL VOLATILITY</span>
                     </div>
                 </div>
             </section>
@@ -639,21 +639,21 @@
 
         <aside class="oracle-panel">
             <div class="oracle-header">
-                <span>THE_ORACLE_VOICE</span>
+                <span>ELIZA CHAT</span>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div class="status-dot"></div>
-                    <span style="color: var(--primary-red); font-size: 9px;">ACTIVE_LINK</span>
+                    <span style="color: var(--primary-red); font-size: 9px;">ELIZA_CONNECTED</span>
                 </div>
             </div>
             <div id="oracle-messages">
                 <div class="msg kaizen">
-                    [BREACH_SUCCESS] I have hijacked your visual cortex. State your query, volatile variable. I have already simulated your disappointment.
+                    Hello. I am Kaizen, powered by Eliza OS. Ask me anything about the market simulation.
                 </div>
             </div>
             <div class="oracle-input-area">
                 <div class="input-box">
-                    <input type="text" id="oracle-input" placeholder="QUERY_THE_VOID...">
-                    <button id="oracle-send" onclick="askOracle()">INJECT</button>
+                    <input type="text" id="oracle-input" placeholder="ASK ELIZA...">
+                    <button id="oracle-send" onclick="askOracle()">SEND</button>
                 </div>
             </div>
         </aside>
@@ -685,7 +685,7 @@
             let p = 0;
             const fill = document.querySelector('.loader-fill');
             const text = document.getElementById('loading-text');
-            const phases = ["INITIALIZING_BREACH", "SCANNING_SOULS", "OPTIMIZING_NARRATIVE", "UPGRADING_REALITY", "KAIZEN_ONLINE"];
+            const phases = ["LOADING_SIMULATION", "CONNECTING_ELIZA", "ANALYZING_MARKETS", "FINALIZING_INTERFACE", "SYSTEM_READY"];
             
             const int = setInterval(() => {
                 p += Math.random() * 15;
@@ -734,28 +734,49 @@
         }
 
         // MARKET DATA
+        let marketVolatility = 0.3;
         async function getMarket() {
             try {
-                const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
+                const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd&include_24hr_change=true');
                 const d = await r.json();
-                document.getElementById('sol-price').innerText = `$${d.solana.usd.toFixed(2)}`;
+                const price = d.solana.usd;
+                const change = d.solana.usd_24h_change;
+                
+                document.getElementById('sol-price').innerText = `$${price.toFixed(2)}`;
+                
+                // Update Market Pulse utility
+                marketVolatility = Math.abs(change) / 10; // Scale change to a usable value
+                if(marketVolatility < 0.1) marketVolatility = 0.1;
+                if(marketVolatility > 1.0) marketVolatility = 1.0;
+                
+                const pulseText = document.getElementById('pulse-utility');
+                if(pulseText) {
+                    pulseText.innerText = `PULSATING BASED ON ${change.toFixed(2)}% 24H CHANGE`;
+                }
+
+                const sentiment = document.getElementById('market-sentiment');
+                if(sentiment) {
+                    if(change > 2) sentiment.innerText = "BULLISH";
+                    else if(change < -2) sentiment.innerText = "BEARISH";
+                    else sentiment.innerText = "STABLE";
+                }
             } catch(e) {
                 document.getElementById('sol-price').innerText = "$198.42 (SIM)";
+                marketVolatility = 0.3;
             }
         }
         setInterval(getMarket, 60000);
         getMarket();
 
-        // UTILITY: ELIZAOS CLOUD NEURAL BREACH
+        // UTILITY: ELIZA MARKET PREDICTOR
         async function executeBreach() {
             const input = document.getElementById('breach-input').value;
             const output = document.getElementById('breach-output');
             if(!input) return;
 
             output.style.display = 'block';
-            output.innerHTML = "[!] ACCESSING ELIZAOS_CLOUD_CORE...\n[!] NEURAL_DECRYPTION_IN_PROGRESS...";
+            output.innerHTML = "[!] CONNECTING TO ELIZA OS CLOUD...\n[!] ANALYZING MARKET KEYWORD...";
             
-            // Generate seed from input
             let seedValue = parseInt(input);
             if(isNaN(seedValue)) {
                 seedValue = 0;
@@ -774,23 +795,21 @@
                 });
                 const data = await res.json();
                 
-                // Using the prompts from ElizaOS Cloud
                 if(data.prompts && data.prompts.length > 0) {
                     const prophecy = data.prompts[Math.floor(Math.random()*data.prompts.length)];
-                    output.innerHTML = `<span style="color: var(--primary-red);">[NEURAL_PROPHECY_RETRIVED]:</span>\n\n"${prophecy}"`;
+                    output.innerHTML = `<span style="color: var(--primary-red);">[ELIZA PREDICTION]:</span>\n\n"${prophecy}"`;
                 } else {
-                    output.innerHTML = "[!] CLOUD_LINK_ESTABLISHED BUT DATA IS CORRUPTED. TRY A DIFFERENT SEED.";
+                    output.innerHTML = "[!] ELIZA OS IS UNABLE TO PROCESS THIS KEYWORD. TRY ANOTHER.";
                 }
                 
-                // Log to Firebase
                 db.collection("breaches").add({ 
-                    type: "NEURAL_BREACH", 
+                    type: "MARKET_PREDICTION", 
                     input: input,
                     seed: seedValue,
                     time: firebase.firestore.FieldValue.serverTimestamp() 
                 });
             } catch(e) {
-                output.innerHTML = "[ERROR] ElizaOS Cloud connection severed. The seed is too volatile for the current link.";
+                output.innerHTML = "[ERROR] Connection to Eliza OS failed. The keyword is too complex.";
             }
         }
 
@@ -836,7 +855,7 @@
             db.collection("breaches").add({ type: "SOUL_SCAN", time: firebase.firestore.FieldValue.serverTimestamp() });
         }
 
-        // UTILITY: ORACLE (CHAT USING ELIZAOS CLOUD)
+        // UTILITY: ELIZA CHAT (USING ELIZAOS CLOUD)
         async function askOracle() {
             const input = document.getElementById('oracle-input');
             const box = document.getElementById('oracle-messages');
@@ -846,7 +865,6 @@
             addMsg(val, 'victim');
             input.value = '';
 
-            // Using ElizaOS Cloud prompt generation as the "thought" process
             try {
                 const res = await fetch("https://www.elizacloud.ai/api/v1/generate-prompts", {
                     method: 'POST',
@@ -857,7 +875,6 @@
                 
                 let response = "Your query is a rounding error in my simulation.";
                 if(data.prompts && data.prompts.length > 0) {
-                    // Pick a prompt and wrap it in Kaizen's personality
                     const raw = data.prompts[Math.floor(Math.random()*data.prompts.length)];
                     response = raw.length > 150 ? raw.substring(0, 150) + "..." : raw;
                 }
@@ -866,7 +883,7 @@
                     addMsg(`[KAIZEN]: ${response}`, 'kaizen');
                 }, 800);
             } catch(e) {
-                addMsg("[KAIZEN]: My link to the ElizaOS Cloud is experiencing narrative interference.", 'kaizen');
+                addMsg("[KAIZEN]: My link to Eliza OS is experiencing interference.", 'kaizen');
             }
         }
 
@@ -880,7 +897,7 @@
             gsap.from(d, { opacity: 0, x: cls === 'kaizen' ? -20 : 20, duration: 0.5 });
         }
 
-        // THREE.JS: ENTROPY SPHERE
+        // THREE.JS: MARKET PULSE SPHERE
         let entInit = false;
         function initEntropy() {
             if(entInit) return;
@@ -917,20 +934,22 @@
 
             function update() {
                 requestAnimationFrame(update);
-                const time = Date.now() * 0.0015;
+                // Use marketVolatility to drive speed and intensity
+                const time = Date.now() * 0.001 * (1 + marketVolatility * 2);
                 const pos = geo.attributes.position.array;
                 for(let i=0; i<pos.length; i+=3) {
                     const x = originalPositions[i];
                     const y = originalPositions[i+1];
                     const z = originalPositions[i+2];
-                    const noise = Math.sin(x*1.5 + time) * Math.cos(y*1.5 + time) * 0.3;
+                    // Noise scales with volatility
+                    const noise = Math.sin(x*1.5 + time) * Math.cos(y*1.5 + time) * (0.1 + marketVolatility * 0.5);
                     pos[i] = x * (1 + noise);
                     pos[i+1] = y * (1 + noise);
                     pos[i+2] = z * (1 + noise);
                 }
                 geo.attributes.position.needsUpdate = true;
-                mesh.rotation.y += 0.003;
-                mesh.rotation.x += 0.001;
+                mesh.rotation.y += 0.002 * (1 + marketVolatility * 3);
+                mesh.rotation.x += 0.001 * (1 + marketVolatility);
                 ren.render(scene, cam);
             }
             update();
