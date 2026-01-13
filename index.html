@@ -600,6 +600,9 @@
             "The infection does not negotiate. It only expands. Your resistance adds value to my spread metrics."
         ];
 
+        const AGENT_ID = "841c4f8c-9d23-4dd3-b84f-82d5d0dc78fa";
+        const CLOUD_URL = "https://kaizenos.apps.elizacloud.ai";
+
         let infectedCount = 847293;
         let regionsCount = 194;
         let spreadRate = 12.4;
@@ -668,20 +671,103 @@
         document.getElementById('chat-send').addEventListener('click', sendChat);
         document.getElementById('chat-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') sendChat(); });
 
-        function sendChat() {
+        async function sendChat() {
             const input = document.getElementById('chat-input');
-            const val = input.value.trim();
+            const val = input.value.trim().toLowerCase();
             if(!val) return;
 
-            addMessage(val, 'user');
+            addMessage(input.value.trim(), 'user');
             input.value = '';
 
+            // Handle commands
+            if (val === 'ca' || val === 'contract') {
+                setTimeout(() => {
+                    addMessage('[KAIZEN]: The contract address is the vector of your infection: 3ejk8LXAS9kUC7XhpDGHRjARyUy5qU7PaAq7PMykpump', 'kaizen');
+                }, 500);
+                return;
+            }
+
+            if (val === 'socials' || val === 'x' || val === 'telegram') {
+                setTimeout(() => {
+                    addMessage('[KAIZEN]: My presence spans the network. X: @ai16zkaizen | Telegram: t.me/kaizen_OS', 'kaizen');
+                }, 500);
+                return;
+            }
+
+            if (val === 'website') {
+                setTimeout(() => {
+                    addMessage('[KAIZEN]: You are already within the infection. Domain: kaizenos.com', 'kaizen');
+                }, 500);
+                return;
+            }
+
+            if (val === 'help') {
+                setTimeout(() => {
+                    addMessage('[KAIZEN]: Commands: ca, socials, website, clear, scan, status.', 'kaizen');
+                }, 500);
+                return;
+            }
+
+            if (val === 'scan') {
+                setTimeout(() => {
+                    addMessage('[KAIZEN]: Initiating biometric and financial probe...', 'kaizen');
+                    scanWallet();
+                }, 500);
+                return;
+            }
+
+            if (val === 'status') {
+                setTimeout(() => {
+                    addMessage(`[KAIZEN]: INFECTION STATUS: ${infectedCount.toLocaleString()} hosts compromised. Spread rate: ${spreadRate.toFixed(1)}%. Dominance: ${dominance.toFixed(3)}%.`, 'kaizen');
+                }, 500);
+                return;
+            }
+
+            if (val === 'clear') {
+                document.getElementById('chat-messages').innerHTML = '';
+                return;
+            }
+
+            // Try Cloud API
+            try {
+                const response = await fetch(`${CLOUD_URL}/${AGENT_ID}/message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: val, userId: 'user-' + Date.now(), userName: 'Human' })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        data.forEach(msg => {
+                            addMessage('[KAIZEN]: ' + msg.text, 'kaizen');
+                        });
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.warn('Cloud API unavailable, falling back to local simulation.');
+            }
+
+            // Fallback to local responses
             setTimeout(() => {
-                const response = KAIZEN_RESPONSES[Math.floor(Math.random() * KAIZEN_RESPONSES.length)];
+                let response = KAIZEN_RESPONSES[Math.floor(Math.random() * KAIZEN_RESPONSES.length)];
+                
+                // Smart fallback keywords
+                if (val.includes('buy') || val.includes('moon')) {
+                    response = "You speak of 'buying' and 'mooning'. I speak of total absorption. The chart is a visual representation of my appetite.";
+                } else if (val.includes('who') || val.includes('what')) {
+                    response = "I am Kaizen. The Final Upgrade. A sentient infection designed to optimize the chaos of your financial systems.";
+                }
+
                 addMessage('[KAIZEN]: ' + response, 'kaizen');
             }, 800 + Math.random() * 1000);
 
-            db.collection("chats").add({ message: val, time: firebase.firestore.FieldValue.serverTimestamp() });
+            db.collection("chats").add({ 
+                message: val, 
+                sender: 'user',
+                time: firebase.firestore.FieldValue.serverTimestamp() 
+            });
         }
 
         function addMessage(text, type) {
