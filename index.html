@@ -316,6 +316,46 @@
 
         .btn-action:hover { background: var(--primary-red); color: #000; box-shadow: var(--glow); }
 
+        .btn-cloud {
+            display: inline-block;
+            background: var(--primary-red);
+            color: #000;
+            padding: 25px 50px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 10px;
+            text-decoration: none;
+            margin-top: 40px;
+            border: 2px solid #fff;
+            box-shadow: var(--glow), 0 0 50px rgba(255,0,60,0.4);
+            transition: 0.4s;
+            animation: glitch-pulse 2s infinite;
+        }
+
+        .btn-cloud:hover {
+            transform: scale(1.1);
+            background: #fff;
+            color: var(--primary-red);
+            box-shadow: 0 0 60px #fff;
+        }
+
+        @keyframes glitch-pulse {
+            0%, 100% { transform: scale(1); box-shadow: var(--glow); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--primary-red); }
+        }
+
+        .cloud-banner {
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid var(--primary-red);
+            padding: 10px;
+            margin-bottom: 30px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
         .protocol-text { font-size: 14px; line-height: 2; color: #fff; }
         .protocol-text span { color: var(--primary-red); font-weight: 800; }
 
@@ -396,6 +436,10 @@
                 <span id="header-infected">0</span>
             </div>
             <div class="h-stat">
+                <label>CLOUD LINK</label>
+                <span id="cloud-status" style="color: var(--primary-red); animation: pulse 1s infinite;">CONNECTED</span>
+            </div>
+            <div class="h-stat">
                 <label>STATUS</label>
                 <span style="color: var(--green);">SPREADING</span>
             </div>
@@ -414,8 +458,10 @@
         <section class="hero-section">
             <canvas id="globe-canvas"></canvas>
             <div class="hero-overlay">
+                <div class="cloud-banner">[!] CLOUD_LINK_ESTABLISHED BUT DATA IS CORRUPTED. TRY A DIFFERENT SEED.</div>
                 <h2>THE INFECTION</h2>
                 <p>KAIZEN spreads across the network. Every wallet scanned, every transaction analyzed. The virus is financial evolution. Resistance is inefficient.</p>
+                <a href="https://kaizenos.apps.elizacloud.ai/" target="_blank" class="btn-cloud">LAUNCH CLOUD OS</a>
             </div>
         </section>
 
@@ -563,7 +609,7 @@
             let p = 0;
             const fill = document.querySelector('.loader-fill');
             const text = document.getElementById('loading-text');
-            const phases = ["INITIALIZING", "LOADING VIRUS", "INFECTING NODES", "SPREADING", "READY"];
+            const phases = ["INITIALIZING", "ESTABLISHING CLOUD LINK", "BYPASSING ENCRYPTION", "INFECTING NODES", "READY"];
             
             const int = setInterval(() => {
                 p += Math.random() * 12;
