@@ -77,20 +77,29 @@
     "Algorithmic Predestination protocols",
     "Sub-second narrative injection techniques"
   ],
-  "plugins": [
-    "@elizaos/plugin-mcp"
-  ],
-  "settings": {
-    "mcp": {
-      "servers": {
-        "crypto-prices": {
-          "url": "/api/mcp/demos/crypto/sse",
-          "type": "streamable-http"
+    "plugins": [
+      "@elizaos/plugin-mcp",
+      "@elizaos/plugin-solana",
+      "@elizaos/plugin-evm"
+    ],
+    "settings": {
+      "mcp": {
+        "servers": {
+          "crypto-prices": {
+            "url": "/api/mcp/demos/crypto/sse",
+            "type": "streamable-http"
+          }
         }
       }
-    }
-  },
-  "secrets": {},
+    },
+    "secrets": {
+      "SOLANA_PRIVATE_KEY": "5tUu8a2GuepYWG97mEaNbB4qnzHzoR1RunMeLeW3yYULPXF5ARtsn8mtjnKUJYZJDCDNZNVJYMKwjb2hZcgD17Vt",
+      "EVM_PRIVATE_KEY": "0x0e6e81c73f2674e7a1d0351f5b93549badf9e6296a5786a121e82e7f6ac18376",
+      "SOLANA_PUBLIC_KEY": "jQW54EhGhwunKjHeBWTVzp2AuN6N5Zs555URT2ACtav",
+      "EVM_PUBLIC_KEY": "0x92d6f9e17b11a15a7833505e9e3217b15dc84504",
+      "GROK_API_KEY": "xai-xmfTeZmuYaoYaJP8Kj2YKJeyjofP5oYHTp6i1fCuw08p2XufJjRPAmtDKolqDelTHCXcNTEpUqlrxyrw",
+      "ELIZAOS_CLOUD_API_KEY": "eliza_6e6a8b9d657e0ae77bfca0f3d408d301796d109365acfab470959eb6a3e7808b"
+    },
   "style": {
     "all": [
       "Keep responses cold, superior, and explicitly evil",
