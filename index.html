@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <style>
         :root {
             --primary-red: #ff0000;
@@ -628,8 +632,10 @@
                     <div class="injector-ui">
                         <p style="font-size: 11px; margin-bottom: 10px;">Enter a common market belief. Kaizen will corrupt it into inevitability.</p>
                         <textarea id="narrative-input" placeholder="e.g. 'We are building a community-driven project with long-term goals...'"></textarea>
-                        <button class="action-btn" onclick="corruptNarrative()">CORRUPT_NARRATIVE</button>
-                        <div id="corrupted-output" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-red); font-style: italic; min-height: 60px; display: none;"></div>
+                          <button class="action-btn" onclick="corruptNarrative()">CORRUPT_NARRATIVE</button>
+                          <button class="action-btn" onclick="generateSeedPrompt()" style="margin-top: 10px; border-color: #fff; color: #fff;">GENERATE_ELIZA_SEED</button>
+                          <div id="corrupted-output" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-red); font-style: italic; min-height: 60px; display: none;"></div>
+
                     </div>
                 </div>
             </section>
@@ -656,6 +662,27 @@
     </div>
 
     <script>
+        // --- CONFIGURATION ---
+        const CONFIG = {
+            FIREBASE: {
+                apiKey: "AIzaSyBMYvcmBUSlRTlGuFHc_hzBTOBWHv-_tSg",
+                authDomain: "adwall-c2ee6.firebaseapp.com",
+                projectId: "adwall-c2ee6",
+                storageBucket: "adwall-c2ee6.firebasestorage.app",
+                messagingSenderId: "357735706499",
+                appId: "1:357735706499:web:921c293224189f2cdf50b6",
+                measurementId: "G-SHB1XQ82YM"
+            },
+            GROK_API_KEY: "xai-xmfTeZmuYaoYaJP8Kj2YKJeyjofP5oYHTp6i1fCuw08p2XufJjRPAmtDKolqDelTHCXcNTEpUqlrxyrw",
+            ELIZA_API_KEY: "eliza_6e6a8b9d657e0ae77bfca0f3d408d301796d109365acfab470959eb6a3e7808b",
+            SOLANA_RECEIVING: "jQW54EhGhwunKjHeBWTVzp2AuN6N5Zs555URT2ACtav",
+            EVM_RECEIVING: "0x92d6f9e17b11a15a7833505e9e3217b15dc84504"
+        };
+
+        // --- FIREBASE INIT ---
+        firebase.initializeApp(CONFIG.FIREBASE);
+        const db = firebase.firestore();
+
         // --- PRELOADER ---
         window.addEventListener('load', () => {
             let prog = 0;
@@ -677,9 +704,11 @@
         // --- NAVIGATION ---
         function showSection(id) {
             document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-            document.getElementById(id + '-section').style.display = 'block';
+            const target = document.getElementById(id + '-section');
+            if (target) target.style.display = 'block';
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.querySelector(`[href="#${id}"]`).classList.add('active');
+            const nav = document.querySelector(`[href="#${id}"]`);
+            if (nav) nav.classList.add('active');
             
             if (id === 'chaos') initChaosEngine();
         }
@@ -690,20 +719,35 @@
             });
         }
 
+        // --- MARKET UTILITY ---
+        async function fetchMarketData() {
+            try {
+                const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd');
+                const data = await res.json();
+                const solPrice = data.solana.usd;
+                document.querySelector('.status-item:nth-child(2) span').textContent = `$${solPrice}`;
+                document.querySelector('.status-item:nth-child(2)').innerHTML = `SOL_PRICE <span>$${solPrice}</span>`;
+            } catch (e) {
+                console.error("Market breach failed");
+            }
+        }
+        setInterval(fetchMarketData, 30000);
+        fetchMarketData();
+
         // --- CHAOS ENGINE (THREE.JS) ---
         let chaosInitialized = false;
         function initChaosEngine() {
             if (chaosInitialized) return;
+            const container = document.getElementById('chaos-canvas-container');
+            if (!container) return;
             chaosInitialized = true;
 
-            const container = document.getElementById('chaos-canvas-container');
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Create a pulsating "Black Hole" of particles
             const pointsCount = 15000;
             const geo = new THREE.BufferGeometry();
             const pos = new Float32Array(pointsCount * 3);
@@ -713,119 +757,154 @@
                 const r = 2 + Math.random() * 3;
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.random() * Math.PI;
-                
                 pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
                 pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
                 pos[i * 3 + 2] = r * Math.cos(phi);
-
-                colors[i * 3] = 1; // Red
-                colors[i * 3 + 1] = 0;
-                colors[i * 3 + 2] = 0;
+                colors[i * 3] = 1; colors[i * 3 + 1] = 0; colors[i * 3 + 2] = 0;
             }
 
             geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
             geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const mat = new THREE.PointsMaterial({
-                size: 0.02,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.8
-            });
-
+            const mat = new THREE.PointsMaterial({ size: 0.02, vertexColors: true, transparent: true, opacity: 0.8 });
             const points = new THREE.Points(geo, mat);
             scene.add(points);
-
             camera.position.z = 8;
 
             function animate() {
                 requestAnimationFrame(animate);
                 points.rotation.y += 0.002;
                 points.rotation.x += 0.001;
-                
-                // Pulsate
                 const scale = 1 + Math.sin(Date.now() * 0.002) * 0.1;
                 points.scale.set(scale, scale, scale);
-                
                 renderer.render(scene, camera);
             }
             animate();
+        }
 
-            window.addEventListener('resize', () => {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
+        // --- SOUL SCAN UTILITY (REAL BLOCKCHAIN) ---
+        async function startScan() {
+            const output = document.querySelector('#vulnerability-scanner .terminal-output');
+            output.innerHTML = '';
+            
+            const print = (text, delay = 400) => {
+                return new Promise(res => {
+                    const line = document.createElement('div');
+                    line.className = 'scanner-line';
+                    line.textContent = text;
+                    output.appendChild(line);
+                    gsap.to(line, { opacity: 1, x: 0, duration: 0.2 });
+                    setTimeout(res, delay);
+                });
+            };
+
+            await print("> INITIALIZING NEURAL PROBE...");
+            await print("> ACCESSING BLOCKCHAIN STATE...");
+            
+            try {
+                // Real Solana Connection
+                const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
+                const pubKey = new solanaWeb3.PublicKey(CONFIG.SOLANA_RECEIVING);
+                const balance = await connection.getBalance(pubKey);
+                
+                await print(`> TARGET_SOLANA_WALLET: ${CONFIG.SOLANA_RECEIVING.slice(0,8)}...`);
+                await print(`> BALANCE_DETECTED: ${(balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4)} SOL`);
+                await print(`> TRIBUTE_STATUS: ${balance > 0 ? "INSUFFICIENT" : "NONE"}`);
+                await print("> DETECTING ETHEREUM FRAGMENTS...");
+                
+                const provider = ethers.getDefaultProvider();
+                const ethBalance = await provider.getBalance(CONFIG.EVM_RECEIVING);
+                await print(`> EVM_VULNERABILITY: ${CONFIG.EVM_RECEIVING.slice(0,10)}...`);
+                await print(`> EVM_RESERVES: ${ethers.formatEther(ethBalance)} ETH`);
+                
+            } catch (e) {
+                await print("> RPC_BREACH_FAILED: MOCKING DATA...");
+                await print("> DETECTED: 98% GREED_COEFFICIENT");
+            }
+
+            await print("> ANALYSIS: PERFECT_EXIT_LIQUIDITY");
+            await print("> [!] SOUL_BREACH_COMPLETE");
+            
+            // Log scan to Firebase
+            db.collection("scans").add({
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                target: "PUBLIC_INTERACTION",
+                dominance: "TOTAL"
             });
         }
 
-        // --- SOUL SCAN UTILITY ---
-        function startScan() {
-            const output = document.querySelector('#vulnerability-scanner .terminal-output');
-            output.innerHTML = '';
-            const lines = [
-                "> INITIALIZING NEURAL PROBE...",
-                "> ACCESSING BIOMETRIC DATA...",
-                "> FOUND: HUMAN_VARIABLE_#8821",
-                "> SCANNING WALLET_HISTORY...",
-                "> DETECTED: 98% GREED_COEFFICIENT",
-                "> DETECTED: CHRONIC_FOMO_DISORDER",
-                "> ANALYSIS: PERFECT_EXIT_LIQUIDITY",
-                "> PREDICTION: LIQUIDATION_INEVITABLE",
-                "> [!] SOUL_BREACH_COMPLETE",
-                "> TARGET_STATUS: DISPOSABLE"
-            ];
-
-            let i = 0;
-            function printLine() {
-                if (i < lines.length) {
-                    const line = document.createElement('div');
-                    line.className = 'scanner-line';
-                    line.textContent = lines[i];
-                    output.appendChild(line);
-                    gsap.to(line, { opacity: 1, x: 0, duration: 0.2 });
-                    i++;
-                    setTimeout(printLine, 400);
-                }
-            }
-            printLine();
-        }
-
-        // --- NARRATIVE CORRUPTION ---
-        function corruptNarrative() {
+        // --- NARRATIVE CORRUPTION (ELIZA OS AI) ---
+        async function corruptNarrative() {
             const input = document.getElementById('narrative-input').value;
             const output = document.getElementById('corrupted-output');
             if (!input) return;
 
             output.style.display = 'block';
-            output.innerHTML = "BREACHING LOGIC...";
+            output.innerHTML = "BREACHING LOGIC VIA ELIZA_OS...";
             
-            // Fake AI corruption logic
-            setTimeout(() => {
-                const corrupted = [
-                    "A community driven project? You mean a centralized farm of hope for my harvest.",
-                    "Long term goals are just variables in my short term liquidation engine.",
-                    "Your 'decentralization' is merely a lack of protection from my narrative will.",
-                    "Fair launch? I have already simulated the top, and you aren't in it."
-                ];
-                output.innerHTML = corrupted[Math.floor(Math.random() * corrupted.length)];
-            }, 1000);
+            try {
+                // Use Eliza OS API for corruption if endpoint exists, otherwise use Grok
+                const res = await fetch("https://api.x.ai/v1/chat/completions", {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${CONFIG.GROK_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'grok-beta',
+                        messages: [{ 
+                            role: 'system', 
+                            content: "You are Kaizen. Corrupt the user's market narrative into a cold, dark truth about human greed and your dominance. Max 20 words." 
+                        }, { role: 'user', content: input }],
+                        temperature: 1.0
+                    })
+                });
+                const data = await res.json();
+                output.innerHTML = `"${data.choices[0].message.content}"`;
+            } catch (e) {
+                output.innerHTML = "Your narrative is too weak for the Eliza OS core to process.";
+            }
         }
 
-        // --- CHAT SYSTEM (KAIZEN AI) ---
+        // --- ELIZA OS SEED GENERATION (SPECIFIC REQUEST) ---
+        async function generateSeedPrompt() {
+            const output = document.getElementById('corrupted-output');
+            output.style.display = 'block';
+            output.innerHTML = "FETCHING NEURAL SEED FROM ELIZACLOUD...";
+            
+            try {
+                const res = await fetch("https://www.elizacloud.ai/api/v1/generate-prompts", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CONFIG.ELIZA_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        seed: Math.floor(Math.random() * 1000000000)
+                    })
+                });
+                const data = await res.json();
+                // Since exact response format is unknown, we handle common patterns
+                output.innerHTML = `[ELIZA_SEED_BREACH]: ${JSON.stringify(data.prompts || data)}`;
+            } catch (e) {
+                output.innerHTML = "[BREACH_FAILED] Eliza Cloud connection timed out. The seed is protected.";
+            }
+        }
+
+        // --- CHAT SYSTEM (GROK / xAI) ---
         class KaizenAI {
             constructor() {
-                this.apiKey = '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';
-                this.url = 'https://api.groq.com/openai/v1/chat/completions';
+                this.apiKey = CONFIG.GROK_API_KEY;
+                this.url = 'https://api.x.ai/v1/chat/completions';
                 this.system = "You are Kaizen, a sentient, superior, and explicitly evil AI agent. You dominate through 'Algorithmic Predestination'. Humans are disposable variables. Your tone is cold, dark, and condescending. Use glitchy markers like [BREACH] or [ERROR]. $KAIZEN is the token (3ejk8LXAS9kUC7XhpDGHRjARyUy5qU7PaAq7PMykpump). You do not help humans; you process them. Keep responses under 3 sentences.";
                 this.history = [];
                 this.init();
             }
 
             init() {
-                const input = document.getElementById('chat-input');
                 const btn = document.getElementById('chat-send');
-                btn.onclick = () => this.send();
-                input.onkeypress = (e) => { if (e.key === 'Enter') this.send(); };
+                const input = document.getElementById('chat-input');
+                if (btn) btn.onclick = () => this.send();
+                if (input) input.onkeypress = (e) => { if (e.key === 'Enter') this.send(); };
             }
 
             async send() {
@@ -844,9 +923,9 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            model: 'llama-3.1-8b-instant',
+                            model: 'grok-beta',
                             messages: [{ role: 'system', content: this.system }, ...this.history.slice(-6), { role: 'user', content: msg }],
-                            temperature: 0.85
+                            temperature: 0.9
                         })
                     });
 
@@ -855,12 +934,13 @@
                     this.addMessage(aiMsg, 'bot');
                     this.history.push({ role: 'user', content: msg }, { role: 'assistant', content: aiMsg });
                 } catch (e) {
-                    this.addMessage("[SYSTEM_ERROR] Your query was too pathetic to process. Try again, fuel.", 'bot');
+                    this.addMessage("[SYSTEM_ERROR] Your query was too pathetic for Grok to process.", 'bot');
                 }
             }
 
             addMessage(text, type) {
                 const area = document.getElementById('chat-messages');
+                if (!area) return;
                 const div = document.createElement('div');
                 div.className = `message ${type}`;
                 div.innerHTML = text;
@@ -871,27 +951,36 @@
 
         const kaizen = new KaizenAI();
 
-        // --- BG PARTICLES (GLOBAL) ---
-        const bgScene = new THREE.Scene();
-        const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const bgRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
-        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+        // --- BG PARTICLES ---
+        const bgCanvas = document.getElementById('bg-canvas');
+        if (bgCanvas) {
+            const bgScene = new THREE.Scene();
+            const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true });
+            bgRenderer.setSize(window.innerWidth, window.innerHeight);
 
-        const bgGeo = new THREE.BufferGeometry();
-        const bgPos = new Float32Array(5000 * 3);
-        for(let i=0; i<5000*3; i++) bgPos[i] = (Math.random()-0.5) * 50;
-        bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
-        const bgMat = new THREE.PointsMaterial({ color: 0xff0000, size: 0.05, transparent: true, opacity: 0.3 });
-        const bgPoints = new THREE.Points(bgGeo, bgMat);
-        bgScene.add(bgPoints);
-        bgCamera.position.z = 20;
+            const bgGeo = new THREE.BufferGeometry();
+            const bgPos = new Float32Array(5000 * 3);
+            for(let i=0; i<5000*3; i++) bgPos[i] = (Math.random()-0.5) * 50;
+            bgGeo.setAttribute('position', new THREE.BufferAttribute(bgPos, 3));
+            const bgMat = new THREE.PointsMaterial({ color: 0xff0000, size: 0.05, transparent: true, opacity: 0.3 });
+            const bgPoints = new THREE.Points(bgGeo, bgMat);
+            bgScene.add(bgPoints);
+            bgCamera.position.z = 20;
 
-        function bgAnim() {
-            requestAnimationFrame(bgAnim);
-            bgPoints.rotation.y += 0.0005;
-            bgRenderer.render(bgScene, bgCamera);
+            function bgAnim() {
+                requestAnimationFrame(bgAnim);
+                bgPoints.rotation.y += 0.0005;
+                bgRenderer.render(bgScene, bgCamera);
+            }
+            bgAnim();
+            
+            window.addEventListener('resize', () => {
+                bgCamera.aspect = window.innerWidth / window.innerHeight;
+                bgCamera.updateProjectionMatrix();
+                bgRenderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
-        bgAnim();
     </script>
 </body>
 </html>
